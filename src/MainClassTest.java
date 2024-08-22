@@ -6,8 +6,13 @@ import org.junit.Test;
 public class MainClassTest extends MainClass {
 
     @Test
-    public void testGetLocalNumber(){
+    public void testGetClassString(){
+        Assert.assertTrue("String should contain substring 'hello' or 'Hello'",getClassString().contains("hello") || getClassString().contains("Hello"));
 
+    }
+
+    @Test
+    public void testGetLocalNumber(){
         Assert.assertEquals("Number is not equal 14", 14, getLocalNumber());
     }
 
