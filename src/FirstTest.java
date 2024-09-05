@@ -37,18 +37,18 @@ public class FirstTest {
     }
     @Test
     public void firstTest(){
-        waitForElementandClick(
+        waitForElementAndClick(
                 By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
                 "Cannot find Skip button on Welcome screen",
                 5
         );
-        waitForElementandClick(
+        waitForElementAndClick(
                 By.xpath("//android.widget.ImageView[@content-desc=\"Search Wikipedia\"]"),
                 "Cannot find element_to_init_search",
                 5
         );
 
-        waitForElementandSendKeys(
+        waitForElementAndSendKeys(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Java",
                 "Cannot find search_text_input element",
@@ -62,19 +62,31 @@ public class FirstTest {
     }
     @Test
     public void testCancelSearch(){
-        waitForElementandClick(
+        waitForElementAndClick(
                 By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
                 "Cannot find Skip button on Welcome screen",
                 5
         );
-        waitForElementandClick(
+        waitForElementAndClick(
                 By.id("org.wikipedia:id/search_container"),
                 "Cannot find 'Search Wikipedia'",
                 8
         );
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Java",
+                "Cannot find search_text_input element",
+                5
+        );
+        waitForElementAndClear(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Cannot find search element",
+                5
+
+        );
 
         //in this Wiki app version no X button, '<-' used to cancel search module(no ID)
-        waitForElementandClick(
+        waitForElementAndClick(
                 By.xpath("//android.widget.ImageButton[@content-desc=\"Navigate up\"]"),
                "Cannot find Arrow_back btn to cancel Search Wikipedia",
                5
@@ -87,24 +99,24 @@ public class FirstTest {
     }
     @Test
     public void testCompareArticleTitle(){
-        waitForElementandClick(
+        waitForElementAndClick(
                 By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
                 "Cannot find Skip button on Welcome screen",
                 5
         );
-        waitForElementandClick(
+        waitForElementAndClick(
                 By.xpath("//android.widget.ImageView[@content-desc=\"Search Wikipedia\"]"),
                 "Cannot find element_to_init_search",
                 5
         );
 
-        waitForElementandSendKeys(
+        waitForElementAndSendKeys(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Java",
                 "Cannot find search_text_input element",
                 5
         );
-        waitForElementandClick(
+        waitForElementAndClick(
                 By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[2]"),
                 "Cannot find 'Java Object-oriented programming language' topic",
                 15);
@@ -133,12 +145,12 @@ public class FirstTest {
     private WebElement waitForElementPresent(By by, String error_message){
         return this.waitForElementPresent(by, error_message, 5);
     }
-    private WebElement waitForElementandClick(By by, String error_message, long timeoutInSeconds){
+    private WebElement waitForElementAndClick(By by, String error_message, long timeoutInSeconds){
         WebElement element = this.waitForElementPresent(by, error_message, 5);
         element.click();
         return element;
     }
-    private WebElement waitForElementandSendKeys(By by, String value, String error_message, long timeoutInSeconds){
+    private WebElement waitForElementAndSendKeys(By by, String value, String error_message, long timeoutInSeconds){
         WebElement element = this.waitForElementPresent(by, error_message, 5);
         element.sendKeys(value);
         return element;
@@ -150,5 +162,10 @@ public class FirstTest {
         return wait.until(
                 ExpectedConditions.invisibilityOfElementLocated(by)
         );
+    }
+    private WebElement waitForElementAndClear(By by, String error_message, long timeoutInSeconds){
+        WebElement element = this.waitForElementPresent(by, error_message, 5);
+        element.clear();
+        return element;
     }
 }
