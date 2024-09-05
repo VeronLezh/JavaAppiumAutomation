@@ -18,25 +18,26 @@ public class FirstTest {
     private AppiumDriver driver;
 
     @Before
-    public void setUP() throws Exception
-    {
+    public void setUP() throws Exception {
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("platformName","Android");
-        capabilities.setCapability("appium:deviceName","api26");
-        capabilities.setCapability("appium:platformVersion","8.0");
-        capabilities.setCapability("appium:appPackage","org.wikipedia");
-        capabilities.setCapability("appium:automationName","UiAutomator2");
-        capabilities.setCapability("appium:appActivity",".main.MainActivity");
-        capabilities.setCapability("appium:app","/Users/veronikalezhneva/Desktop/JavaAppiumAutomation/apks/org.wikipedia.apk");
+        capabilities.setCapability("platformName", "Android");
+        capabilities.setCapability("appium:deviceName", "api26");
+        capabilities.setCapability("appium:platformVersion", "8.0");
+        capabilities.setCapability("appium:appPackage", "org.wikipedia");
+        capabilities.setCapability("appium:automationName", "UiAutomator2");
+        capabilities.setCapability("appium:appActivity", ".main.MainActivity");
+        capabilities.setCapability("appium:app", "/Users/veronikalezhneva/Desktop/JavaAppiumAutomation/apks/org.wikipedia.apk");
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723"), capabilities);
     }
+
     @After
-    public void tearDown(){
+    public void tearDown() {
         driver.quit();
     }
+
     @Test
-    public void firstTest(){
+    public void firstTest() {
         waitForElementAndClick(
                 By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
                 "Cannot find Skip button on Welcome screen",
@@ -60,8 +61,9 @@ public class FirstTest {
                 15);
 
     }
+
     @Test
-    public void testCancelSearch(){
+    public void testCancelSearch() {
         waitForElementAndClick(
                 By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
                 "Cannot find Skip button on Welcome screen",
@@ -82,14 +84,13 @@ public class FirstTest {
                 By.id("org.wikipedia:id/search_src_text"),
                 "Cannot find search element",
                 5
-
         );
 
         //in this Wiki app version no X button, '<-' used to cancel search module(no ID)
         waitForElementAndClick(
                 By.xpath("//android.widget.ImageButton[@content-desc=\"Navigate up\"]"),
-               "Cannot find Arrow_back btn to cancel Search Wikipedia",
-               5
+                "Cannot find Arrow_back btn to cancel Search Wikipedia",
+                5
         );
         waitForElementNotPresent(
                 By.id("org.wikipedia:id/search_results_list"),
@@ -97,8 +98,9 @@ public class FirstTest {
                 5);
 
     }
+
     @Test
-    public void testCompareArticleTitle(){
+    public void testCompareArticleTitle() {
         waitForElementAndClick(
                 By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
                 "Cannot find Skip button on Welcome screen",
@@ -134,38 +136,70 @@ public class FirstTest {
                 article_title);
 
     }
+    @Test
+    public void testFieldContainsText()
+    {
+        waitForElementAndClick(
+                By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
+                "Cannot find Skip button on Welcome screen",
+                5
+        );
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search Wikipedia'",
+                8
+        );
 
-    private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds){
-        WebDriverWait wait = new WebDriverWait(driver,timeoutInSeconds);
+        assertElementHasText(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Cannot find text: 'Search Wikipedia'",
+                "Search Wikipedia"
+
+        );
+
+    }
+
+
+    private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
         return wait.until(
                 ExpectedConditions.presenceOfElementLocated(by)
         );
     }
-    private WebElement waitForElementPresent(By by, String error_message){
+
+    private WebElement waitForElementPresent(By by, String error_message) {
         return this.waitForElementPresent(by, error_message, 5);
     }
-    private WebElement waitForElementAndClick(By by, String error_message, long timeoutInSeconds){
+
+    private WebElement waitForElementAndClick(By by, String error_message, long timeoutInSeconds) {
         WebElement element = this.waitForElementPresent(by, error_message, 5);
         element.click();
         return element;
     }
-    private WebElement waitForElementAndSendKeys(By by, String value, String error_message, long timeoutInSeconds){
+
+    private WebElement waitForElementAndSendKeys(By by, String value, String error_message, long timeoutInSeconds) {
         WebElement element = this.waitForElementPresent(by, error_message, 5);
         element.sendKeys(value);
         return element;
     }
 
-    private boolean waitForElementNotPresent(By by, String error_message, long timeoutInSeconds){
-        WebDriverWait wait=new WebDriverWait(driver,timeoutInSeconds);
+    private boolean waitForElementNotPresent(By by, String error_message, long timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
         return wait.until(
                 ExpectedConditions.invisibilityOfElementLocated(by)
         );
     }
-    private WebElement waitForElementAndClear(By by, String error_message, long timeoutInSeconds){
+
+    private WebElement waitForElementAndClear(By by, String error_message, long timeoutInSeconds) {
         WebElement element = this.waitForElementPresent(by, error_message, 5);
         element.clear();
         return element;
+    }
+
+    private void assertElementHasText(By by, String error_message, String expected_text ) {
+        WebElement element = waitForElementPresent(by, error_message, 5);
+        Assert.assertTrue(error_message, element.getAttribute("text").equals(expected_text));
     }
 }
