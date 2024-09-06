@@ -12,6 +12,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.awt.*;
 import java.net.URL;
 
 public class FirstTest {
@@ -61,7 +62,7 @@ public class FirstTest {
                 15);
 
     }
-
+//Improve testCancelSearch test for Hometask Lesson3 Ex.3
     @Test
     public void testCancelSearch() {
         waitForElementAndClick(
@@ -72,14 +73,17 @@ public class FirstTest {
         waitForElementAndClick(
                 By.id("org.wikipedia:id/search_container"),
                 "Cannot find 'Search Wikipedia'",
-                8
+                5
         );
         waitForElementAndSendKeys(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Java",
+                "Appium",
                 "Cannot find search_text_input element",
-                5
+                20
         );
+        Assert.assertTrue( "Less than 2 articles were found in the search results",
+                driver.findElements(By.id("org.wikipedia:id/page_list_item_title")).size()>1);
+
         waitForElementAndClear(
                 By.id("org.wikipedia:id/search_src_text"),
                 "Cannot find search element",
@@ -87,16 +91,15 @@ public class FirstTest {
         );
 
         //in this Wiki app version no X button, '<-' used to cancel search module(no ID)
-        waitForElementAndClick(
-                By.xpath("//android.widget.ImageButton[@content-desc=\"Navigate up\"]"),
-                "Cannot find Arrow_back btn to cancel Search Wikipedia",
-                5
-        );
+//        waitForElementAndClick(
+//                By.xpath("//android.widget.ImageButton[@content-desc=\"Navigate up\"]"),
+//                "Cannot find Arrow_back btn to cancel Search Wikipedia",
+//                5
+//        );
         waitForElementNotPresent(
                 By.id("org.wikipedia:id/search_results_list"),
-                "Search results is still present on page",
+                "Search results are still present on the page",
                 5);
-
     }
 
     @Test
@@ -202,4 +205,5 @@ public class FirstTest {
         WebElement element = waitForElementPresent(by, error_message, 5);
         Assert.assertTrue(error_message, element.getAttribute("text").equals(expected_text));
     }
+
 }
