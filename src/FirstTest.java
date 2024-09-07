@@ -12,7 +12,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.awt.*;
+import java.util.List;
 import java.net.URL;
 
 public class FirstTest {
@@ -101,7 +101,6 @@ public class FirstTest {
                 "Search results are still present on the page",
                 5);
     }
-
     @Test
     public void testCompareArticleTitle() {
         waitForElementAndClick(
@@ -161,8 +160,35 @@ public class FirstTest {
         );
 
     }
+    @Test
+public void testWordSearchInArticles(){
+    waitForElementAndClick(
+            By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
+            "Cannot find Skip button on Welcome screen",
+            5
+    );
+    waitForElementAndClick(
+            By.id("org.wikipedia:id/search_container"),
+            "Cannot find 'Search Wikipedia'",
+            5
+    );
+    String search_word="Java";
+    waitForElementAndSendKeys(
+            By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+            search_word,
+            "Cannot find search_text_input element",
+            25
+    );
+    List<WebElement> search_Results = driver.findElementsById("org.wikipedia:id/page_list_item_title");
+    Assert.assertFalse("No results found in the search", search_Results.isEmpty());
 
+    for (WebElement result : search_Results) {
+        String resultText = result.getText();
+        Assert.assertTrue("Result does not contain the search word: " + resultText,
+                resultText.toLowerCase().contains(search_word.toLowerCase()));
+    }
 
+}
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
