@@ -2,8 +2,12 @@ package src;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
-import io.appium.java_client.touch.offset.PointOption;
 import io.appium.java_client.touch.WaitOptions;
+import io.appium.java_client.touch.offset.PointOption;
+import org.openqa.selenium.interactions.Pause;
+import org.openqa.selenium.interactions.PointerInput;
+import org.openqa.selenium.interactions.Sequence;
+import java.util.Arrays;
 import java.time.Duration;
 import io.appium.java_client.android.AndroidDriver;
 import org.junit.After;
@@ -155,32 +159,29 @@ public class FirstTest {
                 "Cannot find element_to_init_search",
                 5
         );
-
         waitForElementAndSendKeys(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
                 "Appium",
                 "Cannot find search_text_input element",
                 5
         );
-
         waitForElementAndClick(
                 By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[1]"),
                 "Cannot find 'Appium' topic",
-                15);
-
-       waitForElementPresent(
+                15
+        );
+        waitForElementPresent(
                 By.xpath("//*[contains(@text, 'Appium')]"),
                 "Cannot find 'Appium' title",
-                15);
-
-       swipeUpToFindElement(
+                15
+        );
+        swipeUpToFindElement(
                By.xpath("//*[@text='View article in browser']"),
                "Cannot find the end of the article",
                20
        );
 
     }
-
     @Test
     public void testFieldContainsText()
     {
@@ -267,12 +268,8 @@ public class FirstTest {
                 "Cannot find Add to list button",
                 5
         );
-        //in this Wiki version input is empty
-//        waitForElementAndClear(
-//                By.id("org.wikipedia:id/text_input"),
-//                "Cannot find input to set name",
-//                5
-//        );
+        //in this Wiki version input is empty by default
+
         String name_of_folder="Learning programming";
 
         waitForElementAndSendKeys(
@@ -310,14 +307,15 @@ public class FirstTest {
                 By.xpath("//*[contains(@text, 'Java (programming language)')]"),
                 "Cannot find saved article"
         );
-        waitForElementNotPresent(
-                By.xpath("//*[contains(@text, 'Java (programming language)')]"),
+
+        waitForElementPresent(
+                By.xpath("//*[contains(@text, 'You have no articles added to this list.')]"),
                 "Article is still present",
                 5
         );
 
-
     }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
@@ -361,22 +359,46 @@ public class FirstTest {
         Assert.assertTrue(error_message, element.getAttribute("text").equals(expected_text));
     }
 
-    protected void swipeUp(int timeOfSwipe){
-        TouchAction action = new TouchAction(driver);
+//   protected void swipeUp(int timeOfSwipe){
+//        TouchAction action = new TouchAction(driver);
+//        Dimension size = driver.manage().window().getSize();
+//        int x = size.width / 2;
+//        int start_y = (int)(size.height * 0.8);
+//        int end_y = (int)(size.height * 0.2);
+////methods press(), moveTo(), и waitAction() expect types PointOption and WaitOptions,but not int.
+//        action
+//                .press(PointOption.point(x,start_y))
+//                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(timeOfSwipe)))
+//                .moveTo(PointOption.point(x,end_y))
+//                .release()
+//                .perform();
+//    }
+
+    protected void swipeUp(int timeOfSwipe) {
+        // Create a PointerInput instance
+        PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
+        // Get the screen size
         Dimension size = driver.manage().window().getSize();
         int x = size.width / 2;
-        int start_y = (int)(size.height * 0.8);
-        int end_y = (int)(size.height * 0.2);
-//methods press(), moveTo(), и waitAction() expect types PointOption and WaitOptions,but not int.
-        action
-                .press(PointOption.point(x,start_y))
-                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(timeOfSwipe)))
-                .moveTo(PointOption.point(x,end_y))
-                .release()
-                .perform();
+        int start_y = (int) (size.height * 0.8);
+        int end_y = (int) (size.height * 0.2);
+
+        Sequence swipe = new Sequence(finger, 1);
+        // Press in x,startY
+        swipe.addAction(finger.createPointerMove(Duration.ofMillis(0), PointerInput.Origin.viewport(), x, start_y));
+        swipe.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
+        // wait action
+        swipe.addAction(new Pause(finger, Duration.ofMillis(timeOfSwipe)));
+        // move to end_y
+        swipe.addAction(finger.createPointerMove(Duration.ofMillis(300), PointerInput.Origin.viewport(), x, end_y));
+        // unpress
+        swipe.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+        // perform
+        driver.perform(Arrays.asList(swipe));
     }
+
     protected void swipeUpQuick(){
-        swipeUp(200);
+        swipeUp(300);
     }
     protected void swipeUpToFindElement(By by, String error_message, int max_swipes){
         int already_swiped = 0;
@@ -389,22 +411,52 @@ public class FirstTest {
             ++already_swiped;
         }
     }
-    protected void swipeElementToLeft(By by, String error_message){
-        WebElement element = waitForElementPresent(by, error_message,10);
+//    protected void swipeElementToLeft(By by, String error_message){
+//        WebElement element = waitForElementPresent(by, error_message,10);
+//        int left_x = element.getLocation().getX();
+//        int right_x = left_x + element.getSize().getWidth();
+//        int upper_y = element.getLocation().getY();
+//        int lower_y = upper_y + element.getSize().getHeight();
+//        int middle_y=(upper_y+lower_y)/2;
+//
+//        TouchAction action = new TouchAction(driver);
+//        action
+//                .press(PointOption.point(right_x, middle_y))
+//                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(300)))
+//                .moveTo(PointOption.point(left_x,middle_y))
+//                .release()
+//                .perform();
+//
+//    }
+
+    protected void swipeElementToLeft(By by, String error_message) {
+        WebElement element = waitForElementPresent(by, error_message, 10);
+        // Coordinates
         int left_x = element.getLocation().getX();
         int right_x = left_x + element.getSize().getWidth();
         int upper_y = element.getLocation().getY();
         int lower_y = upper_y + element.getSize().getHeight();
-        int middle_y=(upper_y+lower_y)/2;
+        int middle_y = (upper_y + lower_y) / 2;
 
-        TouchAction action = new TouchAction(driver);
-        action
-                .press(PointOption.point(right_x, middle_y))
-                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(300)))
-                .moveTo(PointOption.point(left_x,middle_y))
-                .release()
-                .perform();
+        //PointerInput initialization for screen interaction
+        PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
+        Sequence swipe = new Sequence(finger, 1);
 
+        // Press in right_x
+        swipe.addAction(finger.createPointerMove(Duration.ofMillis(0), PointerInput.Origin.viewport(), right_x, middle_y));
+        swipe.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
+
+        // wait action
+        swipe.addAction(new Pause(finger, Duration.ofMillis(300)));
+
+        // move to left_x
+        swipe.addAction(finger.createPointerMove(Duration.ofMillis(300), PointerInput.Origin.viewport(), left_x, middle_y));
+
+        // unpress
+        swipe.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+
+        // perform
+        driver.perform(Arrays.asList(swipe));
     }
 
 }
