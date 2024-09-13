@@ -315,6 +315,69 @@ public class FirstTest {
         );
 
     }
+    @Test
+    public void testAmountOfNotEmptySearch(){
+        waitForElementAndClick(
+                By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
+                "Cannot find Skip button on Welcome screen",
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageView[@content-desc=\"Search Wikipedia\"]"),
+                "Cannot find element_to_init_search",
+                5
+        );
+        String search_line = "Linkin Park Diskography";
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                search_line,
+                "Cannot find search_text_input element",
+                5
+        );
+        String search_result_locator = "org.wikipedia:id/page_list_item_title";
+        waitForElementPresent(
+                By.id(search_result_locator),
+                "Cannot find anything by the request " + search_line,
+                15
+        );
+        int amount_of_search_results = getAmountOfElements(
+                By.id(search_result_locator)
+        );
+        Assert.assertTrue("We found too few results",
+                amount_of_search_results>0
+        );
+    }
+    @Test
+    public void testAmountOfEmptySearch(){
+        waitForElementAndClick(
+                By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
+                "Cannot find Skip button on Welcome screen",
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageView[@content-desc=\"Search Wikipedia\"]"),
+                "Cannot find element_to_init_search",
+                5
+        );
+        String search_line = "hgfhkfg";
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                search_line,
+                "Cannot find search_text_input element",
+                5
+        );
+        String search_result_locator = "org.wikipedia:id/page_list_item_title";
+        String empty_result = "//*[@text='No results']";
+        waitForElementPresent(
+                By.xpath(empty_result),
+                "Cannot find empty_result label",
+                15
+        );
+        assertElementNotPresent(
+                By.id(search_result_locator),
+                "We have found some results by request "+ search_line
+        );
+    }
 
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
@@ -457,6 +520,18 @@ public class FirstTest {
 
         // perform
         driver.perform(Arrays.asList(swipe));
+    }
+    private int getAmountOfElements(By by){
+      List elements = driver.findElements(by);
+      return elements.size();
+    }
+
+    private void assertElementNotPresent(By by, String error_message ){
+        int amount_of_elements = getAmountOfElements(by);
+        if (amount_of_elements>0){
+            String default_message = "An element "+by.toString()+" supposed to be not present";
+            throw new AssertionError(default_message+ " " +error_message);
+        }
     }
 
 }
