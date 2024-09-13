@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
+import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.interactions.Pause;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
@@ -378,6 +379,93 @@ public class FirstTest {
                 "We have found some results by request "+ search_line
         );
     }
+    @Test
+    public void testScreenRotationForArticlePage(){
+        waitForElementAndClick(
+                By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
+                "Cannot find Skip button on Welcome screen",
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageView[@content-desc=\"Search Wikipedia\"]"),
+                "Cannot find element_to_init_search",
+                5
+        );
+        String search_line = "Java";
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                search_line,
+                "Cannot find search_text_input element",
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[2]"),
+                "Cannot find 'Java Object-oriented programming language' topic " + search_line,
+                15
+        );
+        String title_before_rotation=waitForElementAndGetAttribute(
+                By.xpath("//*[contains(@text, 'Java (programming language)')]"),
+                "text",
+                "Cannot find 'Java (programming language)' title",
+                15
+        );
+        driver.rotate(ScreenOrientation.LANDSCAPE);
+        String title_after_rotation=waitForElementAndGetAttribute(
+                By.xpath("//*[contains(@text, 'Java (programming language)')]"),
+                "text",
+                "Cannot find 'Java (programming language)' title",
+                15
+        );
+        Assert.assertEquals(
+                "Title has been changed after rotation",
+                title_before_rotation,
+                title_after_rotation
+        );
+        driver.rotate(ScreenOrientation.PORTRAIT);
+        String title_after_second_rotation=waitForElementAndGetAttribute(
+                By.xpath("//*[contains(@text, 'Java (programming language)')]"),
+                "text",
+                "Cannot find 'Java (programming language)' title",
+                15
+        );
+        Assert.assertEquals(
+                "Title has been changed after rotation",
+                title_before_rotation,
+                title_after_second_rotation
+        );
+
+    }
+    @Test
+    public void testCheckSearchArticleInBackground(){
+        waitForElementAndClick(
+                By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
+                "Cannot find Skip button on Welcome screen",
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageView[@content-desc=\"Search Wikipedia\"]"),
+                "Cannot find element_to_init_search",
+                5
+        );
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Java",
+                "Cannot find search_text_input element",
+                5
+        );
+        waitForElementPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[2]"),
+                "Cannot find 'Java Object-oriented programming language' topic",
+                15
+        );
+        driver.runAppInBackground(Duration.ofSeconds(2));
+        waitForElementPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[2]"),
+                "Cannot find article after returning foreground",
+                15
+        );
+
+    }
 
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
@@ -532,6 +620,10 @@ public class FirstTest {
             String default_message = "An element "+by.toString()+" supposed to be not present";
             throw new AssertionError(default_message+ " " +error_message);
         }
+    }
+    private String waitForElementAndGetAttribute(By by, String attribute, String error_message, long timeoutInSeconds){
+        WebElement element = waitForElementPresent(by,error_message,timeoutInSeconds);
+        return element.getAttribute(attribute);
     }
 
 }
