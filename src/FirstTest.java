@@ -606,6 +606,35 @@ public class FirstTest {
         );
 
     }
+    @Test
+    public void testCheckArticleTitlePresent(){
+        waitForElementAndClick(
+                By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
+                "Cannot find Skip button on Welcome screen",
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageView[@content-desc=\"Search Wikipedia\"]"),
+                "Cannot find element_to_init_search",
+                5
+        );
+        String search_line_1 ="Java";
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                search_line_1,
+                "Cannot find search_text_input element "+search_line_1,
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[2]"),
+                "Cannot find 'Java Object-oriented programming language' topic",
+                15
+        );
+        assertElementPresent(
+                By.xpath("//*[@resource-id='pcs-edit-section-title-description']"),
+                "Article title is not found on the page"
+        );
+    }
 
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
@@ -764,6 +793,13 @@ public class FirstTest {
     private String waitForElementAndGetAttribute(By by, String attribute, String error_message, long timeoutInSeconds){
         WebElement element = waitForElementPresent(by,error_message,timeoutInSeconds);
         return element.getAttribute(attribute);
+    }
+    private void assertElementPresent(By by, String error_message) {
+        int amount_of_elements = getAmountOfElements(by);
+        if (amount_of_elements == 0) {
+            String default_message = "An element '" + by.toString() + "' supposed to be present";
+            throw new AssertionError(default_message + " " + error_message);
+        }
     }
 
 }
