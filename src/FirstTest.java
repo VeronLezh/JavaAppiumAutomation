@@ -72,7 +72,6 @@ public class FirstTest {
                 15);
 
     }
-//Improve testCancelSearch test for Hometask Lesson3 Ex.3
     @Test
     public void testCancelSearch() {
         waitForElementAndClick(
@@ -184,8 +183,7 @@ public class FirstTest {
 
     }
     @Test
-    public void testFieldContainsText()
-    {
+    public void testFieldContainsText() {
         waitForElementAndClick(
                 By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
                 "Cannot find Skip button on Welcome screen",
@@ -196,7 +194,6 @@ public class FirstTest {
                 "Cannot find 'Search Wikipedia'",
                 8
         );
-
         assertElementHasText(
                 By.id("org.wikipedia:id/search_src_text"),
                 "Cannot find text: 'Search Wikipedia'",
@@ -463,6 +460,149 @@ public class FirstTest {
                 By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[2]"),
                 "Cannot find article after returning foreground",
                 15
+        );
+
+    }
+    @Test
+    public void testSave2ArticlesToMyList(){
+        waitForElementAndClick(
+                By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
+                "Cannot find Skip button on Welcome screen",
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageView[@content-desc=\"Search Wikipedia\"]"),
+                "Cannot find element_to_init_search",
+                5
+        );
+        String search_line_1 ="Java";
+        String search_line_2 = "Appium";
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                search_line_1,
+                "Cannot find search_text_input element "+search_line_1,
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[2]"),
+                "Cannot find 'Java Object-oriented programming language' topic",
+                15
+        );
+        waitForElementPresent(
+                By.xpath("//*[contains(@text, 'Java (programming language)')]"),
+                "Cannot find 'Java (programming language)' title",
+                15
+        );
+        waitForElementAndClick(
+                By.xpath("//android.widget.TextView[@content-desc='Save']"),
+                "Cannot find Save article button",
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//*[@text='Add to list']"),
+                "Cannot find Add to list button",
+                5
+        );
+        String name_of_folder="Learning programming";
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/text_input"),
+                name_of_folder,
+                "Cannot enter text into list folder input",
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//*[@text='OK']"),
+                "Cannot find Add to list button",
+                5
+        );
+        //back to search results
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
+                "Cannot find Arrow_back button",
+                5
+        );
+        //Clear the previous search
+        waitForElementAndClear(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Cannot find search element",
+                5
+        );
+        //search the second article
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                search_line_2,
+                "Cannot find search_text_input element "+search_line_2,
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[1]"),
+                "Cannot find " +search_line_2+" topic",
+                15
+        );
+        waitForElementPresent(
+                By.xpath("//*[contains(@text, 'Appium')]"),
+                "Cannot find " +search_line_2+" title",
+                15
+        );
+        waitForElementAndClick(
+                By.xpath("//android.widget.TextView[@content-desc='Save']"),
+                "Cannot find Save article button",
+                5);
+        waitForElementAndClick(
+                By.xpath("//*[@text='Add to list']"),
+                "Cannot find 'Add to list' button",
+                5
+        );
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/item_reading_list_statistical_description"),
+                "Cannot find the existing folder "+name_of_folder,
+                5);
+        //back to search results
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
+                "Cannot find Arrow_back button",
+                5
+        );
+        //back to main page
+        waitForElementAndClick(
+                By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
+                "Cannot find Arrow_back button",
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//android.widget.FrameLayout[@content-desc='Saved']"),
+                "Cannot find 'Saved' articles button",
+                5);
+        waitForElementAndClick(
+                By.xpath("//android.widget.TextView[@resource-id='org.wikipedia:id/item_title' and @text='"+name_of_folder+"']"),
+                "Cannot find My list with articles",
+                5);
+        swipeElementToLeft(
+                By.xpath("//*[contains(@text, 'Java (programming language)')]"),
+                "Cannot find saved article"
+        );
+        //check article 1 is NOT in the folder more
+        waitForElementNotPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']/[@text='Java (programming language)']"),
+                "Article is still present",
+                5
+        );
+        //check article 2 is in the folder
+        waitForElementPresent(
+                By.xpath("//*[contains(@text, '"+search_line_2+"')]"),
+                "Article is not present",
+                5
+        );
+        //open article 2
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, '"+search_line_2+"')]"),
+                "Article is not present",
+                5
+        );
+        assertElementHasText(
+                By.xpath("//*[@text='"+search_line_2+"']"),
+                "Cannot find text header: "+search_line_2,
+                search_line_2
         );
 
     }
