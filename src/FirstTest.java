@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import src.lib.CoreTestCase;
 import src.lib.ui.MainPageObject;
+import src.lib.ui.SearchPageObject;
 
 import java.util.List;
 
@@ -21,27 +22,12 @@ public class FirstTest extends CoreTestCase {
 
     @Test
     public void testSearch() {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
-                "Cannot find Skip button on Welcome screen",
-                5
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.ImageView[@content-desc=\"Search Wikipedia\"]"),
-                "Cannot find element_to_init_search",
-                5
-        );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Java",
-                "Cannot find search_text_input element",
-                5
-        );
-        MainPageObject.waitForElementPresent(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[2]"),
-                "Cannot find 'Java Object-oriented programming language' topic",
-                15);
+        SearchPageObject.skipOnboarding();
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        SearchPageObject.waitForSearchResult("Object-oriented programming language");
 
     }
     @Test
