@@ -1,57 +1,27 @@
 package src;
 
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.TouchAction;
-import io.appium.java_client.touch.WaitOptions;
-import io.appium.java_client.touch.offset.PointOption;
 import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.interactions.Pause;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
 import java.util.Arrays;
 import java.time.Duration;
-import io.appium.java_client.android.AndroidDriver;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import src.lib.CoreTestCase;
 
 import java.util.List;
-import java.net.URL;
 
-public class FirstTest {
-    private AppiumDriver driver;
+public class FirstTest extends CoreTestCase {
 
-    @Before
-    public void setUP() throws Exception {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("platformName", "Android");
-        capabilities.setCapability("appium:deviceName", "api29");
-        capabilities.setCapability("appium:platformVersion", "10.0");
-        capabilities.setCapability("appium:appPackage", "org.wikipedia");
-        capabilities.setCapability("appium:automationName", "UiAutomator2");
-        capabilities.setCapability("appium:appActivity", ".main.MainActivity");
-        capabilities.setCapability("appium:app", "/Users/veronikalezhneva/Desktop/JavaAppiumAutomation/apks/org.wikipedia.apk");
-
-        driver = new AndroidDriver(new URL("http://127.0.0.1:4723"), capabilities);
-    }
-
-    @After
-    public void tearDown() {
-        if (driver.getOrientation().equals(ScreenOrientation.LANDSCAPE)) {
-            driver.rotate(ScreenOrientation.PORTRAIT);
-        }
-        driver.quit();
-    }
 
     @Test
-    public void firstTest() {
+    public void testSearch() {
         waitForElementAndClick(
                 By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
                 "Cannot find Skip button on Welcome screen",
