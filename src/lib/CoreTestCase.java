@@ -13,7 +13,7 @@ public class CoreTestCase extends TestCase {
     private static String AppiumURL="http://127.0.0.1:4723";
 
 @Override
-    public void setUp() throws Exception {
+    protected void setUp() throws Exception {
         super.setUp();
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("platformName", "Android");
@@ -27,7 +27,7 @@ public class CoreTestCase extends TestCase {
         driver = new AndroidDriver(new URL(AppiumURL), capabilities);
     }
 @Override
-    public void tearDown() throws Exception{
+    protected void tearDown() throws Exception{
         if (driver.getOrientation().equals(ScreenOrientation.LANDSCAPE)) {
             driver.rotate(ScreenOrientation.PORTRAIT);
         }
