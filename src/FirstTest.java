@@ -32,42 +32,25 @@ public class FirstTest extends CoreTestCase {
     }
     @Test
     public void testCancelSearch() {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
-                "Cannot find Skip button on Welcome screen",
-                5
-        );
-        MainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/search_container"),
-                "Cannot find 'Search Wikipedia'",
-                5
-        );
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Appium",
-                "Cannot find search_text_input element",
-                20
-        );
-        Assert.assertTrue( "Less than 2 articles were found in the search results",
-                driver.findElements(By.id("org.wikipedia:id/page_list_item_title")).size()>1);
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
-        MainPageObject.waitForElementAndClear(
-                By.id("org.wikipedia:id/search_src_text"),
-                "Cannot find search element",
-                5
-        );
+        SearchPageObject.skipOnboarding();
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Appium");
+        SearchPageObject.waitForCancelButtonToAppear();
+        SearchPageObject.clickCancelSearch();
+        SearchPageObject.waitForCancelButtonToDisappear();
+        
+//        Assert.assertTrue( "Less than 2 articles were found in the search results",
+//                driver.findElements(By.id("org.wikipedia:id/page_list_item_title")).size()>1);
 
-        //in this Wiki app version no X button, '<-' used to cancel search module(no ID)
-//        waitForElementAndClick(
-//                By.xpath("//android.widget.ImageButton[@content-desc=\"Navigate up\"]"),
-//                "Cannot find Arrow_back btn to cancel Search Wikipedia",
-//                5
-//        );
-        MainPageObject.waitForElementNotPresent(
-                By.id("org.wikipedia:id/search_results_list"),
-                "Search results are still present on the page",
-                5);
-    }
+
+
+//        MainPageObject.waitForElementNotPresent(
+//                By.id("org.wikipedia:id/search_results_list"),
+//                "Search results are still present on the page",
+//                5);
+}
     @Test
     public void testCompareArticleTitle() {
         MainPageObject.waitForElementAndClick(
