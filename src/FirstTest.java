@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import src.lib.CoreTestCase;
+import src.lib.ui.ArticlePageObject;
 import src.lib.ui.MainPageObject;
 import src.lib.ui.SearchPageObject;
 
@@ -53,74 +54,31 @@ public class FirstTest extends CoreTestCase {
 }
     @Test
     public void testCompareArticleTitle() {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
-                "Cannot find Skip button on Welcome screen",
-                5
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.ImageView[@content-desc=\"Search Wikipedia\"]"),
-                "Cannot find element_to_init_search",
-                5
-        );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.skipOnboarding();
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Java",
-                "Cannot find search_text_input element",
-                5
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[2]"),
-                "Cannot find 'Java Object-oriented programming language' topic",
-                15);
-
-        WebElement title_element = MainPageObject.waitForElementPresent(
-                By.xpath("//*[contains(@text, 'Java (programming language)')]"),
-                "Cannot find 'Java (programming language)' title",
-                15);
-
-        String article_title = title_element.getAttribute("text");
-
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        String article_subtitle = ArticlePageObject.getArticleSubtitle();
         Assert.assertEquals(
-                "We see unexpected title!",
-                "Java (programming language)",
-                article_title);
+                "We see unexpected subtitle!",
+                "Object-oriented programming language",
+                article_subtitle);
 
     }
     @Test
     public void testSwipeArticle() {
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
-                "Cannot find Skip button on Welcome screen",
-                5
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.ImageView[@content-desc=\"Search Wikipedia\"]"),
-                "Cannot find element_to_init_search",
-                5
-        );
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Appium",
-                "Cannot find search_text_input element",
-                5
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[1]"),
-                "Cannot find 'Appium' topic",
-                15
-        );
-        MainPageObject.waitForElementPresent(
-                By.xpath("//*[contains(@text, 'Appium')]"),
-                "Cannot find 'Appium' title",
-                15
-        );
-        MainPageObject.swipeUpToFindElement(
-               By.xpath("//*[@text='View article in browser']"),
-               "Cannot find the end of the article",
-               20
-       );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.skipOnboarding();
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Appium");
+        SearchPageObject.clickByArticleWithSubstring("Automation for Apps");
+
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject.waitForSubtitleElement();
+        ArticlePageObject.swipeToFooter();
 
     }
     @Test
