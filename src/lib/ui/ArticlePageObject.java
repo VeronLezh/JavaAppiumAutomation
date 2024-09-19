@@ -7,7 +7,11 @@ import org.openqa.selenium.WebElement;
 public class ArticlePageObject extends MainPageObject{
     private static final String
             SUBTITLE = "//*[@resource-id='pcs-edit-section-title-description']",
-            FOOTER_ELEMENT = "//*[@text='View article in browser']";
+            FOOTER_ELEMENT = "//*[@text='View article in browser']",
+            SAVE_ARTICLE_BUTTON = "//android.widget.TextView[@content-desc='Save']",
+            ADD_TO_LIST_BUTTON = "//*[@text='Add to list']",
+            MY_LIST_NAME_INPUT ="org.wikipedia:id/text_input",
+            OK_BUTTON = "//*[@text='OK']";
 
     public ArticlePageObject(AppiumDriver driver)
     {
@@ -29,6 +33,32 @@ public class ArticlePageObject extends MainPageObject{
                 "Cannot find the end of article",
                 20);
     }
+
+    public void addArticleToMyList(String name_of_folder){
+        this.waitForElementAndClick(
+                By.xpath(SAVE_ARTICLE_BUTTON),
+                "Cannot find Save article button",
+                5);
+        this.waitForElementAndClick(
+                By.xpath(ADD_TO_LIST_BUTTON),
+                "Cannot find Add to list button",
+                5
+        );
+        //in this Wiki version folder input is empty by default
+        this.waitForElementAndSendKeys(
+                By.id(MY_LIST_NAME_INPUT),
+                name_of_folder,
+                "Cannot enter text into list folder input",
+                5
+        );
+        this.waitForElementAndClick(
+                By.xpath(OK_BUTTON),
+                "Cannot find Add to list button",
+                5
+        );
+    }
+
+
 
 
 }
