@@ -176,90 +176,40 @@ public class FirstTest extends CoreTestCase {
     }
     @Test
     public void testScreenRotationForArticlePage(){
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
-                "Cannot find Skip button on Welcome screen",
-                5
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.ImageView[@content-desc=\"Search Wikipedia\"]"),
-                "Cannot find element_to_init_search",
-                5
-        );
-        String search_line = "Java";
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                search_line,
-                "Cannot find search_text_input element",
-                5
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[2]"),
-                "Cannot find 'Java Object-oriented programming language' topic " + search_line,
-                15
-        );
-        String title_before_rotation=MainPageObject.waitForElementAndGetAttribute(
-                By.xpath("//*[contains(@text, 'Java (programming language)')]"),
-                "text",
-                "Cannot find 'Java (programming language)' title",
-                15
-        );
-        driver.rotate(ScreenOrientation.LANDSCAPE);
-        String title_after_rotation=MainPageObject.waitForElementAndGetAttribute(
-                By.xpath("//*[contains(@text, 'Java (programming language)')]"),
-                "text",
-                "Cannot find 'Java (programming language)' title",
-                15
-        );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.skipOnboarding();
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        String title_before_rotation=ArticlePageObject.getArticleSubtitle();
+        this.rotateScreenLandscape();
+        String title_after_rotation=ArticlePageObject.getArticleSubtitle();
+
         Assert.assertEquals(
                 "Title has been changed after rotation",
                 title_before_rotation,
                 title_after_rotation
         );
-        driver.rotate(ScreenOrientation.PORTRAIT);
-        String title_after_second_rotation=MainPageObject.waitForElementAndGetAttribute(
-                By.xpath("//*[contains(@text, 'Java (programming language)')]"),
-                "text",
-                "Cannot find 'Java (programming language)' title",
-                15
-        );
+        this.rotateScreenPortrait();
+        String title_after_second_rotation=ArticlePageObject.getArticleSubtitle();
+
         Assert.assertEquals(
                 "Title has been changed after rotation",
                 title_before_rotation,
                 title_after_second_rotation
         );
-
     }
     @Test
     public void testCheckSearchArticleInBackground(){
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
-                "Cannot find Skip button on Welcome screen",
-                5
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.ImageView[@content-desc=\"Search Wikipedia\"]"),
-                "Cannot find element_to_init_search",
-                5
-        );
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Java",
-                "Cannot find search_text_input element",
-                5
-        );
-        MainPageObject.waitForElementPresent(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[2]"),
-                "Cannot find 'Java Object-oriented programming language' topic",
-                15
-        );
-        driver.runAppInBackground(Duration.ofSeconds(2));
-        MainPageObject.waitForElementPresent(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']/android.view.ViewGroup[2]"),
-                "Cannot find article after returning foreground",
-                15
-        );
-
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.skipOnboarding();
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        SearchPageObject.waitForSearchResult("Object-oriented programming language");
+        this.backgroundApp(2);
+        SearchPageObject.waitForSearchResult("Object-oriented programming language");
     }
     @Test
     public void testSave2ArticlesToMyList(){
