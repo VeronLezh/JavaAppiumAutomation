@@ -154,66 +154,25 @@ public class FirstTest extends CoreTestCase {
     }
     @Test
     public void testAmountOfNotEmptySearch(){
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
-                "Cannot find Skip button on Welcome screen",
-                5
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.ImageView[@content-desc=\"Search Wikipedia\"]"),
-                "Cannot find element_to_init_search",
-                5
-        );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.skipOnboarding();
+        SearchPageObject.initSearchInput();
         String search_line = "Linkin Park Diskography";
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                search_line,
-                "Cannot find search_text_input element",
-                5
-        );
-        String search_result_locator = "org.wikipedia:id/page_list_item_title";
-        MainPageObject.waitForElementPresent(
-                By.id(search_result_locator),
-                "Cannot find anything by the request " + search_line,
-                15
-        );
-        int amount_of_search_results = MainPageObject.getAmountOfElements(
-                By.id(search_result_locator)
-        );
+        SearchPageObject.typeSearchLine(search_line);
+        int amount_of_search_results = SearchPageObject.getAmountOfFoundArticles();
         Assert.assertTrue("We found too few results",
                 amount_of_search_results>0
         );
     }
     @Test
     public void testAmountOfEmptySearch(){
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
-                "Cannot find Skip button on Welcome screen",
-                5
-        );
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//android.widget.ImageView[@content-desc=\"Search Wikipedia\"]"),
-                "Cannot find element_to_init_search",
-                5
-        );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.skipOnboarding();
+        SearchPageObject.initSearchInput();
         String search_line = "hgfhkfg";
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                search_line,
-                "Cannot find search_text_input element",
-                5
-        );
-        String search_result_locator = "org.wikipedia:id/page_list_item_title";
-        String empty_result = "//*[@text='No results']";
-        MainPageObject.waitForElementPresent(
-                By.xpath(empty_result),
-                "Cannot find empty_result label",
-                15
-        );
-        MainPageObject.assertElementNotPresent(
-                By.id(search_result_locator),
-                "We have found some results by request "+ search_line
-        );
+        SearchPageObject.typeSearchLine(search_line);
+        SearchPageObject.waitEmptySearchResultLabel();
+        SearchPageObject.assertThereIsNoResultOfSearch();
     }
     @Test
     public void testScreenRotationForArticlePage(){

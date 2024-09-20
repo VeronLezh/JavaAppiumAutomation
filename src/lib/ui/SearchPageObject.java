@@ -10,7 +10,9 @@ public class SearchPageObject extends MainPageObject {
             SEARCH_INIT_ELEMENT = "//android.widget.ImageView[@content-desc='Search Wikipedia']",
             SEARCH_INPUT = "//*[contains(@text, 'Search Wikipedia')]",
             SEARCH_RESULT_BY_SUBSTRING_TPL ="//*[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{SUBSTRING}']",
-            SEARCH_CANCEL_BUTTON="org.wikipedia:id/search_close_btn";
+            SEARCH_CANCEL_BUTTON="org.wikipedia:id/search_close_btn",
+            SEARCH_RESULT_ELEMENT = "org.wikipedia:id/page_list_item_title",
+            EMPTY_SEARCH_RESULTS_LABEL = "//*[@text='No results']";
 
 
     public SearchPageObject(AppiumDriver driver)
@@ -76,5 +78,23 @@ public class SearchPageObject extends MainPageObject {
         String search_result_xpath = getResultSearchElement(substring);
         this.waitForElementAndClick(By.xpath(search_result_xpath),
                 "Cannot find and click search result with substring "+ substring, 10);
+    }
+
+    public int getAmountOfFoundArticles(){
+        this.waitForElementPresent(
+                By.id(SEARCH_RESULT_ELEMENT),
+                "Cannot find anything by the request ",
+                15
+        );
+        return this.getAmountOfElements(By.id(SEARCH_RESULT_ELEMENT));
+    }
+
+    public void waitEmptySearchResultLabel(){
+        this.waitForElementPresent(By.xpath(EMPTY_SEARCH_RESULTS_LABEL),"Cannot find empty_result label",15);
+
+    }
+
+    public void assertThereIsNoResultOfSearch(){
+        this.assertElementNotPresent(By.id(SEARCH_RESULT_ELEMENT),"We supposed not to find any result");
     }
 }
