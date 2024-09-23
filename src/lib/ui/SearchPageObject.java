@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import java.io.Console;
 import java.util.List;
 
 public class SearchPageObject extends MainPageObject {
@@ -13,8 +14,13 @@ public class SearchPageObject extends MainPageObject {
             SEARCH_INIT_ELEMENT = "//android.widget.ImageView[@content-desc='Search Wikipedia']",
             SEARCH_INPUT = "//*[contains(@text, 'Search Wikipedia')]",
             SEARCH_RESULT_BY_SUBSTRING_TPL ="//*[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{SUBSTRING}']",
+            SEARCH_RESULT_BY_SUBSTRING_TITLE_SUBSTRING_DESC = "//*[@resource-id='org.wikipedia:id/search_results_list'][" +
+                    "    .//android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_title' and @text='{TITLE}'] and" +
+                    "    .//android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{DESCRIPTION}']" +
+                    "]",
             SEARCH_CANCEL_BUTTON="org.wikipedia:id/search_close_btn",
             SEARCH_RESULT_ELEMENT = "org.wikipedia:id/page_list_item_title",
+            SEARCH_RESULT_ELEMENT_DESCRIPTION = "org.wikipedia:id/page_list_item_description",
             EMPTY_SEARCH_RESULTS_LABEL = "//*[@text='No results']";
 
 
@@ -27,6 +33,12 @@ public class SearchPageObject extends MainPageObject {
     private static String getResultSearchElement(String substring)
     {
         return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
+    }
+
+    private static String getResultSearchByTitleAndDescription(String substring1, String substring2){
+        return SEARCH_RESULT_BY_SUBSTRING_TITLE_SUBSTRING_DESC
+                .replace("{TITLE}", substring1)
+                .replace("{DESCRIPTION}", substring2);
     }
     /* TEMPLATES METHODS */
 
@@ -61,19 +73,31 @@ public class SearchPageObject extends MainPageObject {
                 "Cannot find search result with substring "+ substring);
     }
 
+    public void waitForElementByTitleAndDescription(String article_title,String article_description)
+    {
+        String search_result_xpath = getResultSearchByTitleAndDescription(article_title,article_description);
+        this.waitForElementPresent(By.xpath(search_result_xpath),
+                "Cannot find search result with title "+ article_title + " and description " + article_description,
+                15);
+
+    }
+
     public void waitForCancelButtonToAppear(){
         this.waitForElementPresent(By.id(SEARCH_CANCEL_BUTTON),
-                "Cannot find search cancel button!", 5);
+                "Cannot find search cancel button!",
+                5);
     }
 
     public void clickCancelSearch(){
         this.waitForElementAndClick(By.id(SEARCH_CANCEL_BUTTON),
-                "Cannot find and click search cancel button", 5);
+                "Cannot find and click search cancel button",
+                5);
     }
 
     public void waitForCancelButtonToDisappear(){
         this.waitForElementNotPresent(By.id(SEARCH_CANCEL_BUTTON),
-                "Search cancel button still present", 5);
+                "Search cancel button still present",
+                5);
     }
 
     public void clickByArticleWithSubstring(String substring)
