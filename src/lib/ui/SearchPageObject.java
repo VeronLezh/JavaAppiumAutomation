@@ -108,9 +108,4 @@ public class SearchPageObject extends MainPageObject {
                 text);
 
     }
-
-    public List<WebElement> getSearchResults() {
-        this.waitForElementPresent(By.xpath(SEARCH_RESULT_ELEMENT),"Cannot find anything by the request",15);
-        return driver.findElements(By.xpath(SEARCH_RESULT_ELEMENT));
-    }
 }
