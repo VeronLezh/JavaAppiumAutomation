@@ -33,55 +33,31 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject.assertThereIsNoResultOfSearch();
 
     }
-//    @Test
-//    public void testFieldContainsText() {
-//        MainPageObject.waitForElementAndClick(
-//                By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
-//                "Cannot find Skip button on Welcome screen",
-//                5
-//        );
-//        MainPageObject.waitForElementAndClick(
-//                By.id("org.wikipedia:id/search_container"),
-//                "Cannot find 'Search Wikipedia'",
-//                8
-//        );
-//        MainPageObject.assertElementHasText(
-//                By.id("org.wikipedia:id/search_src_text"),
-//                "Cannot find text: 'Search Wikipedia'",
-//                "Search Wikipedia"
-//
-//        );
-//
-//    }
-//    @Test
-//    public void testWordSearchInArticles(){
-//        MainPageObject.waitForElementAndClick(
-//                By.xpath("//android.widget.Button[contains(@resource-id,'fragment_onboarding_skip_button')]"),
-//                "Cannot find Skip button on Welcome screen",
-//                5
-//        );
-//        MainPageObject.waitForElementAndClick(
-//                By.id("org.wikipedia:id/search_container"),
-//                "Cannot find 'Search Wikipedia'",
-//                5
-//        );
-//        String search_word="Java";
-//        MainPageObject.waitForElementAndSendKeys(
-//                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-//                search_word,
-//                "Cannot find search_text_input element",
-//                25
-//        );
-//        List<WebElement> search_Results = driver.findElementsById("org.wikipedia:id/page_list_item_title");
-//        assertFalse("No results found in the search", search_Results.isEmpty());
-//
-//        for (WebElement result : search_Results) {
-//            String resultText = result.getText();
-//            assertTrue("Result does not contain the search word: " + resultText,
-//                    resultText.toLowerCase().contains(search_word.toLowerCase()));
-//        }
-//
-//    }
+    @Test
+    public void testFieldContainsText() {
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+
+        SearchPageObject.skipOnboarding();
+        SearchPageObject.initSearchInput();
+        SearchPageObject.checkElementHasText("Search Wikipedia");
+
+    }
+    @Test
+    public void testWordSearchInArticles(){
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.skipOnboarding();
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        String search_line = "Java";
+        List<WebElement> search_Results = driver.findElementsById("org.wikipedia:id/page_list_item_title");
+        assertFalse("No results found in the search", search_Results.isEmpty());
+        for (WebElement result : search_Results) {
+            String resultText = result.getText();
+            assertTrue("Result does not contain the search word: " + resultText,
+                    resultText.toLowerCase().contains(search_line.toLowerCase()));
+        }
+
+    }
     @Test
     public void testAmountOfNotEmptySearch(){
         SearchPageObject SearchPageObject = new SearchPageObject(driver);

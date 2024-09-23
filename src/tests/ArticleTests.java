@@ -1,7 +1,6 @@
 package src.tests;
 
 import org.junit.Test;
-import org.openqa.selenium.By;
 import src.lib.CoreTestCase;
 import src.lib.ui.ArticlePageObject;
 import src.lib.ui.SearchPageObject;

@@ -2,6 +2,9 @@ package src.lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 public class SearchPageObject extends MainPageObject {
 
@@ -96,5 +99,18 @@ public class SearchPageObject extends MainPageObject {
 
     public void assertThereIsNoResultOfSearch(){
         this.assertElementNotPresent(By.id(SEARCH_RESULT_ELEMENT),"We supposed not to find any result");
+    }
+
+    public void checkElementHasText(String text) {
+        this.assertElementHasText(
+                By.xpath(SEARCH_INPUT),
+                "Cannot find text: " + text,
+                text);
+
+    }
+
+    public List<WebElement> getSearchResults() {
+        this.waitForElementPresent(By.xpath(SEARCH_RESULT_ELEMENT),"Cannot find anything by the request",15);
+        return driver.findElements(By.xpath(SEARCH_RESULT_ELEMENT));
     }
 }
