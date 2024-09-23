@@ -11,7 +11,8 @@ public class ArticlePageObject extends MainPageObject{
             SAVE_ARTICLE_BUTTON = "//android.widget.TextView[@content-desc='Save']",
             ADD_TO_LIST_BUTTON = "//*[@text='Add to list']",
             MY_LIST_NAME_INPUT ="org.wikipedia:id/text_input",
-            OK_BUTTON = "//*[@text='OK']";
+            OK_BUTTON = "//*[@text='OK']",
+            EXISTING_MY_LIST_FOLDER = "org.wikipedia:id/item_reading_list_statistical_description";
 
     public ArticlePageObject(AppiumDriver driver)
     {
@@ -57,6 +58,30 @@ public class ArticlePageObject extends MainPageObject{
                 5
         );
     }
+
+    public void addSecondMoreArticleToMyList(String name_of_folder){
+        this.waitForElementAndClick(
+                By.xpath(SAVE_ARTICLE_BUTTON),
+                "Cannot find Save article button",
+                5);
+        this.waitForElementAndClick(
+                By.xpath(ADD_TO_LIST_BUTTON),
+                "Cannot find Add to list button",
+                5
+        );
+        this.waitForElementAndClick(
+                By.id(EXISTING_MY_LIST_FOLDER),
+                "Cannot find the existing folder "+name_of_folder,
+                5);
+    }
+
+    public void assertElementHasTitle(String article_title) {
+        this.assertElementHasText(
+                By.xpath(SUBTITLE),
+                "Cannot find title " + article_title + " as article title",
+                article_title);
+    }
+
 
 
 

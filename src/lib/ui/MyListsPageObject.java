@@ -55,4 +55,13 @@ public class MyListsPageObject extends MainPageObject{
         this.waitForArticleToDisappearByTitle(article_title);
 
     }
+     public void openArticleFromMyList(String article_title){
+         this.waitForArticleToAppearByTitle(article_title);
+         String article_xpath = getSavedArticleXpathByName(article_title);
+         this.waitForElementAndClick(
+                 By.xpath(article_xpath),
+                 "Article is not present",
+                 5
+         );
+     }
 }
