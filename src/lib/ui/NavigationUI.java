@@ -1,12 +1,11 @@
 package src.lib.ui;
 
 import io.appium.java_client.AppiumDriver;
-import org.openqa.selenium.By;
 
 public class NavigationUI extends MainPageObject{
     private static final String
-            NAVIGATION_UP = "//android.widget.ImageButton[@content-desc='Navigate up']",
-            MY_LISTS_BUTTON = "//android.widget.FrameLayout[@content-desc='Saved']";
+            NAVIGATION_UP = "xpath://android.widget.ImageButton[@content-desc='Navigate up']",
+            MY_LISTS_BUTTON = "xpath://android.widget.FrameLayout[@content-desc='Saved']";
 
     public NavigationUI(AppiumDriver driver)
     {
@@ -15,7 +14,7 @@ public class NavigationUI extends MainPageObject{
     public void navigationUp(){
     //back to search results
         this.waitForElementAndClick(
-                By.xpath(NAVIGATION_UP),
+               NAVIGATION_UP,
                 "Cannot find Arrow_back button",
                 5
         );
@@ -28,7 +27,7 @@ public class NavigationUI extends MainPageObject{
 
     public void clickMyLists(){
         this.waitForElementAndClick(
-                By.xpath(MY_LISTS_BUTTON),
+               MY_LISTS_BUTTON,
                 "Cannot find Saved articles button",
                 5);
     }
