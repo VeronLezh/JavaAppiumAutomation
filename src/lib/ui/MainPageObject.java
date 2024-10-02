@@ -10,6 +10,7 @@ import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import src.lib.Platform;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -64,7 +65,12 @@ public class MainPageObject {
 
     public void assertElementHasText(String locator, String error_message, String expected_text ) {
         WebElement element = waitForElementPresent(locator, error_message, 5);
-        Assert.assertTrue(error_message, element.getAttribute("text").equals(expected_text));
+        if (Platform.getInstance().isAndroid()){
+            Assert.assertTrue(error_message, element.getAttribute("text").equals(expected_text));
+        } else {
+            Assert.assertTrue(error_message, element.getAttribute("name").equals(expected_text));
+        }
+
     }
 
 //   protected void swipeUp(int timeOfSwipe){
@@ -120,6 +126,25 @@ public class MainPageObject {
             ++already_swiped;
         }
     }
+    public void swipeUpTillElementAppear(String locator, String error_message, int max_swipes){
+        int already_swiped = 0;
+        while (!this.isElementLocatedOnTheScreen(locator))
+        {
+            if (already_swiped>max_swipes){
+                Assert.assertTrue(error_message, this.isElementLocatedOnTheScreen(locator));
+            }
+            swipeUpQuick();
+            ++already_swiped;
+        }
+
+    }
+
+    public boolean isElementLocatedOnTheScreen(String locator){
+        int element_location_by_y = this.waitForElementPresent(locator,"Cannot find element by locator",5).getLocation().getY();
+        int screen_size_by_y=driver.manage().window().getSize().getHeight();
+        return element_location_by_y < screen_size_by_y;
+    }
+
 //    protected void swipeElementToLeft(By by, String error_message){
 //        WebElement element = waitForElementPresent(by, error_message,10);
 //        int left_x = element.getLocation().getX();
@@ -184,6 +209,7 @@ public class MainPageObject {
         WebElement element = waitForElementPresent(locator,error_message,timeoutInSeconds);
         return element.getAttribute(attribute);
     }
+
     public void assertElementPresent(String locator, String error_message) {
         int amount_of_elements = getAmountOfElements(locator);
         if (amount_of_elements == 0) {

@@ -4,6 +4,7 @@ import org.junit.Test;
 import src.lib.CoreTestCase;
 import src.lib.ui.ArticlePageObject;
 import src.lib.ui.SearchPageObject;
+import src.lib.ui.factories.ArticlePageObjectFactory;
 import src.lib.ui.factories.SearchPageObjectFactory;
 
 public class ArticleTests extends CoreTestCase {
@@ -12,14 +13,14 @@ public class ArticleTests extends CoreTestCase {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.skipOnboarding();
         SearchPageObject.initSearchInput();
-        SearchPageObject.typeSearchLine("Java");
-        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+        SearchPageObject.typeSearchLine("Appium");
+        SearchPageObject.clickByArticleWithSubstring("Automation for Apps");
 
-        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         String article_subtitle = ArticlePageObject.getArticleSubtitle();
         assertEquals(
                 "We see unexpected subtitle!",
-                "Object-oriented programming language",
+                "Automation for Apps",
                 article_subtitle);
 
     }
@@ -32,7 +33,7 @@ public class ArticleTests extends CoreTestCase {
         SearchPageObject.typeSearchLine("Appium");
         SearchPageObject.clickByArticleWithSubstring("Automation for Apps");
 
-        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         ArticlePageObject.waitForSubtitleElement();
         ArticlePageObject.swipeToFooter();
 
@@ -43,10 +44,10 @@ public class ArticleTests extends CoreTestCase {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.skipOnboarding();
         SearchPageObject.initSearchInput();
-        String search_line = "Java";
+        String search_line = "Appium";
         SearchPageObject.typeSearchLine(search_line);
-        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
-        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        SearchPageObject.clickByArticleWithSubstring("Automation for Apps");
+        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         String article_subtitle = ArticlePageObject.getArticleSubtitle();
         ArticlePageObject.assertElementHasTitle(article_subtitle);
     }

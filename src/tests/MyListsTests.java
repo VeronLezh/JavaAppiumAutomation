@@ -6,6 +6,7 @@ import src.lib.ui.ArticlePageObject;
 import src.lib.ui.MyListsPageObject;
 import src.lib.ui.NavigationUI;
 import src.lib.ui.SearchPageObject;
+import src.lib.ui.factories.ArticlePageObjectFactory;
 import src.lib.ui.factories.SearchPageObjectFactory;
 
 public class MyListsTests extends CoreTestCase {
@@ -17,7 +18,7 @@ public class MyListsTests extends CoreTestCase {
         SearchPageObject.typeSearchLine("Java");
         SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         ArticlePageObject.waitForSubtitleElement();
         String article_subtitle = ArticlePageObject.getArticleSubtitle();
 
@@ -43,7 +44,7 @@ public class MyListsTests extends CoreTestCase {
         String search_line_2 = "Appium";
         SearchPageObject.typeSearchLine(search_line_1);
         SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
-        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         ArticlePageObject.waitForSubtitleElement();
         String article_subtitle = ArticlePageObject.getArticleSubtitle();
 

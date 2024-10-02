@@ -58,10 +58,10 @@ public class Platform {
     private DesiredCapabilities getIOSDesiredCapabilities(){
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("platformName", "iOS");
-        capabilities.setCapability("appium:deviceName", "iPhone SE (3rd generation)");
-        capabilities.setCapability("appium:platformVersion", "16.0");
+        capabilities.setCapability("appium:deviceName", "iPhone 16 Pro");
+        capabilities.setCapability("appium:platformVersion", "18.0");
         capabilities.setCapability("appium:automationName", "XCUITest");
-        capabilities.setCapability("appium:app", "/Users/veronikalezhneva/Desktop//JavaAppiumAutomation/apks/Wikipedia.app");
+        capabilities.setCapability("appium:app", "/Users/veronikalezhneva/Desktop/JavaAppiumAutomation/apks/Wikipedia.app");
         return capabilities;
     }
 
