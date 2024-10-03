@@ -13,7 +13,6 @@ abstract public class SearchPageObject extends MainPageObject {
             SEARCH_RESULT_BY_SUBSTRING_TITLE_SUBSTRING_DESC,
             SEARCH_CANCEL_BUTTON,
             SEARCH_RESULT_ELEMENT,
-            SEARCH_RESULT_ELEMENT_DESCRIPTION,
             EMPTY_SEARCH_RESULTS_LABEL;
 
 

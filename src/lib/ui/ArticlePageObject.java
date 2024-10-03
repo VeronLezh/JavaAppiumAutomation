@@ -45,7 +45,6 @@ abstract public class ArticlePageObject extends MainPageObject{
                     20);
         }
 
-
     }
 
     public void addArticleToMyList(String name_of_folder){

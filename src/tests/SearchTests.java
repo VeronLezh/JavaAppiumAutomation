@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import src.lib.CoreTestCase;
+import src.lib.Platform;
 import src.lib.ui.SearchPageObject;
 import src.lib.ui.factories.SearchPageObjectFactory;
 
@@ -27,8 +28,14 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject.skipOnboarding();
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Appium");
-        assertTrue( "Less than 2 articles were found in the search results",
-               driver.findElements(By.id("org.wikipedia:id/page_list_item_title")).size()>1);
+        if (Platform.getInstance().isAndroid()){
+            assertTrue( "Less than 2 articles were found in the search results",
+                    driver.findElements(By.id("org.wikipedia:id/page_list_item_title")).size()>1);
+        } else {
+            assertTrue( "Less than 2 articles were found in the search results",
+                    driver.findElements(By.xpath("//XCUIElementTypeCollectionView/XCUIElementTypeCell")).size()>1);
+        }
+
         SearchPageObject.waitForCancelButtonToAppear();
         SearchPageObject.clickCancelSearch();
         SearchPageObject.assertThereIsNoResultOfSearch();

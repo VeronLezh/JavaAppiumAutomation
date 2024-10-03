@@ -4,26 +4,35 @@ import org.junit.Test;
 import src.lib.CoreTestCase;
 import src.lib.Platform;
 import src.lib.ui.WelcomePageObject;
+import src.lib.ui.factories.WelcomePageObjectFactory;
 
 public class GetStartedTest extends CoreTestCase {
 
     @Test
     public void testPassThroughWelcome()
     {
-        if (Platform.getInstance().isAndroid()){
-            return;
+        WelcomePageObject WelcomePageObject = WelcomePageObjectFactory.get(driver);
+        if (Platform.getInstance().isIOS()){
+            WelcomePageObject.waitForLearnMoreLink();
+        } else {
+            WelcomePageObject.waitForAddOrEditPreferredLangText();
         }
-        WelcomePageObject WelcomePageObject = new WelcomePageObject(driver);
-        WelcomePageObject.waitForLearnMoreLink();
         WelcomePageObject.clickNextButton();
-
         WelcomePageObject.waitForNewWayToExploreText();
         WelcomePageObject.clickNextButton();
 
-        WelcomePageObject.waitForAddOrEditPreferredLangText();
+        if (Platform.getInstance().isIOS()){
+            WelcomePageObject.waitForAddOrEditPreferredLangText();
+        } else {
+            WelcomePageObject.waitForReadingList();
+        }
         WelcomePageObject.clickNextButton();
 
-        WelcomePageObject.waitForLearnMoreAboutDataCollectedText();
+        if (Platform.getInstance().isIOS()){
+            WelcomePageObject.waitForLearnMoreAboutDataCollectedText();
+        } else {
+            WelcomePageObject.waitForDataPrivacy();
+        }
         WelcomePageObject.clickGetStartedButton();
 
     }

@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import junit.framework.TestCase;
 import org.openqa.selenium.ScreenOrientation;
 import src.lib.ui.WelcomePageObject;
+import src.lib.ui.factories.WelcomePageObjectFactory;
 
 import java.time.Duration;
 
@@ -40,7 +41,7 @@ public class CoreTestCase extends TestCase {
 
     public void skipWelcome(){
         if (Platform.getInstance().isIOS()){
-            WelcomePageObject WelcomePageObject = new WelcomePageObject(driver);
+            WelcomePageObject WelcomePageObject = WelcomePageObjectFactory.get(driver);
             WelcomePageObject.clickSkip();
         }
     }

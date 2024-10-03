@@ -14,7 +14,6 @@ public class AndroidSearchPageObject extends SearchPageObject {
             "    .//android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{DESCRIPTION}']"+ "]";
     SEARCH_CANCEL_BUTTON="id:org.wikipedia:id/search_close_btn";
     SEARCH_RESULT_ELEMENT ="id:org.wikipedia:id/page_list_item_title";
-    SEARCH_RESULT_ELEMENT_DESCRIPTION ="id:org.wikipedia:id/page_list_item_description";
     EMPTY_SEARCH_RESULTS_LABEL ="xpath://*[@text='No results']";
 }
 
