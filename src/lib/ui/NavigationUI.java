@@ -2,10 +2,11 @@ package src.lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 
-public class NavigationUI extends MainPageObject{
-    private static final String
-            NAVIGATION_UP = "xpath://android.widget.ImageButton[@content-desc='Navigate up']",
-            MY_LISTS_BUTTON = "xpath://android.widget.FrameLayout[@content-desc='Saved']";
+abstract public class NavigationUI extends MainPageObject{
+    protected static String
+            NAVIGATION_UP,
+            GO_TO_MAIN, //ios button
+            MY_LISTS_BUTTON;
 
     public NavigationUI(AppiumDriver driver)
     {
@@ -23,6 +24,12 @@ public class NavigationUI extends MainPageObject{
         this.navigationUp();
         //back to main page
         this.navigationUp();
+    }
+
+    public void backToMain(){
+        this.waitForElementAndClick(GO_TO_MAIN,
+                "Cannot find Wikipedia, return to Explore button",
+                5);
     }
 
     public void clickMyLists(){

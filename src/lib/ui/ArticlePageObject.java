@@ -10,6 +10,7 @@ abstract public class ArticlePageObject extends MainPageObject{
             FOOTER_ELEMENT,
             SAVE_ARTICLE_BUTTON,
             ADD_TO_LIST_BUTTON,
+            CREATE_NEW_LIST_BUTTON,
             MY_LIST_NAME_INPUT,
             OK_BUTTON,
             EXISTING_MY_LIST_FOLDER;
@@ -57,7 +58,13 @@ abstract public class ArticlePageObject extends MainPageObject{
                 "Cannot find Add to list button",
                 5
         );
-        //in this Wiki version folder input is empty by default
+        if (Platform.getInstance().isIOS()) {
+            this.waitForElementAndClick(
+                    CREATE_NEW_LIST_BUTTON,
+                    "Cannot find +Create new list button",
+                    5
+            );
+        }
         this.waitForElementAndSendKeys(
                 MY_LIST_NAME_INPUT,
                 name_of_folder,
