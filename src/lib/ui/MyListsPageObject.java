@@ -9,7 +9,8 @@ abstract public class MyListsPageObject extends MainPageObject{
     ARTICLE_BY_TITLE_TPL,
     NO_SAVED_ARTICLES_LABEL,
     CLOSE_SYNC_WINDOW, //for ios
-    READING_LISTS, //for ios
+    READING_LISTS,//for ios
+            SAVED_ARTICLE_LIST_ITEM,
             SWIPE_ACTION_DELETE;//for ios
 
     private static String getFolderXpathByName(String name_of_folder){
@@ -84,4 +85,9 @@ abstract public class MyListsPageObject extends MainPageObject{
                  "Cannot find Reading Lists tab in Saved",
                  5);
      }
+
+    public int getAmountOfAddedArticles() {
+        this.waitForElementPresent(SAVED_ARTICLE_LIST_ITEM, "Cannot find saved articles", 15);
+        return getAmountOfElements(SAVED_ARTICLE_LIST_ITEM);
+    }
 }

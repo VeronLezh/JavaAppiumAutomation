@@ -6,6 +6,7 @@ import src.lib.ui.ArticlePageObject;
 public class AndroidArticlePageObject extends ArticlePageObject {
     static {
         SUBTITLE = "xpath://*[@resource-id='pcs-edit-section-title-description']";
+        SUBTITLE_BY_TPL = "xpath://*[@resource-id='pcs-edit-section-title-description' and @text='{TITLE}']";
         FOOTER_ELEMENT = "xpath://*[@text='View article in browser']";
         SAVE_ARTICLE_BUTTON = "xpath://android.widget.TextView[@content-desc='Save']";
         ADD_TO_LIST_BUTTON = "xpath://*[@text='Add to list']";

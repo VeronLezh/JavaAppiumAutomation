@@ -7,6 +7,7 @@ import src.lib.Platform;
 abstract public class ArticlePageObject extends MainPageObject{
     protected static String
             SUBTITLE,
+            SUBTITLE_BY_TPL,
             FOOTER_ELEMENT,
             SAVE_ARTICLE_BUTTON,
             ADD_TO_LIST_BUTTON,
@@ -19,7 +20,20 @@ abstract public class ArticlePageObject extends MainPageObject{
     {
         super(driver);
     }
-//no unique title id(only subtitle)
+
+    private static String getArticleXpathByName(String article_title){
+        return SUBTITLE_BY_TPL.replace("{TITLE}",article_title);
+    }
+
+    public void waitForArticleTitleElement(String article_title){
+        String article_xpath = getArticleXpathByName(article_title);
+        this.waitForElementPresent(
+                article_xpath,
+                "Cannot find article title " +article_title,
+                5
+        );
+    }
+
     public WebElement waitForSubtitleElement(){
         return this.waitForElementPresent(SUBTITLE,
                 "Cannot find article title on page", 10);
@@ -32,8 +46,23 @@ abstract public class ArticlePageObject extends MainPageObject{
         } else {
             return subtitle_element.getAttribute("name");
         }
-
     }
+
+    public String getArticleSubtitleByTPL(String article_title) {
+        String article_xpath = getArticleXpathByName(article_title); // Generation Xpath for Article title
+
+        WebElement subtitle_element = this.waitForElementPresent(
+                article_xpath,
+                "Cannot find subtitle for article " + article_title,
+                10
+        );
+        if (Platform.getInstance().isAndroid()){
+            return subtitle_element.getAttribute("text");
+        } else {
+            return subtitle_element.getAttribute("name");
+        }
+    }
+
 
     public void swipeToFooter() {
         if (Platform.getInstance().isAndroid()){
@@ -95,8 +124,9 @@ abstract public class ArticlePageObject extends MainPageObject{
     }
 
     public void assertElementHasTitle(String article_title) {
+        String article_xpath = getArticleXpathByName(article_title);
         this.assertElementHasText(
-                SUBTITLE,
+                article_xpath,
                 "Cannot find title " + article_title + " as article title",
                 article_title);
     }

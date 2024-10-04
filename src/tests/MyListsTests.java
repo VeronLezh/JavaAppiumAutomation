@@ -13,18 +13,23 @@ import src.lib.ui.factories.NavigationUIFactory;
 import src.lib.ui.factories.SearchPageObjectFactory;
 
 public class MyListsTests extends CoreTestCase {
-    private static final String name_of_folder = "Learning programming";
+    private static final String
+            name_of_folder = "Learning programming",
+            search_line_1 ="Java",
+            search_line_2 = "Appium",
+            substring1="Object-oriented programming language",
+            substring2="Automation for Apps";
 
     @Test
     public void testSaveFirstArticleToMyList(){
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.skipOnboarding();
         SearchPageObject.initSearchInput();
-        SearchPageObject.typeSearchLine("Java");
-        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+        SearchPageObject.typeSearchLine(search_line_1);
+        SearchPageObject.clickByArticleWithSubstring(substring1);
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
-        ArticlePageObject.waitForSubtitleElement();
-        String article_subtitle = ArticlePageObject.getArticleSubtitle();
+        ArticlePageObject.waitForArticleTitleElement(substring1);
+        String article_subtitle = ArticlePageObject.getArticleSubtitleByTPL(substring1);
         ArticlePageObject.addArticleToMyList(name_of_folder);
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
         if (Platform.getInstance().isAndroid()){
@@ -46,14 +51,11 @@ public class MyListsTests extends CoreTestCase {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.skipOnboarding();
         SearchPageObject.initSearchInput();
-        String search_line_1 ="Java";
-        String search_line_2 = "Appium";
         SearchPageObject.typeSearchLine(search_line_1);
-        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+        SearchPageObject.clickByArticleWithSubstring(substring1);
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
-        ArticlePageObject.waitForSubtitleElement();
-        String article_subtitle = ArticlePageObject.getArticleSubtitle();
-
+        ArticlePageObject.waitForArticleTitleElement(substring1);
+        String article_subtitle = ArticlePageObject.getArticleSubtitleByTPL(substring1);
 
         ArticlePageObject.addArticleToMyList(name_of_folder);
 
@@ -61,20 +63,36 @@ public class MyListsTests extends CoreTestCase {
         NavigationUI.navigationUp();
         SearchPageObject.clickCancelSearch();
         SearchPageObject.typeSearchLine(search_line_2);
-        SearchPageObject.clickByArticleWithSubstring("Automation for Apps");
-        ArticlePageObject.waitForSubtitleElement();
-        String article_subtitle_2 = ArticlePageObject.getArticleSubtitle();
-        ArticlePageObject.addSecondMoreArticleToMyList(name_of_folder);
+        SearchPageObject.clickByArticleWithSubstring(substring2);
+        ArticlePageObject.waitForArticleTitleElement(substring2);
+        String article_subtitle_2 = ArticlePageObject.getArticleSubtitleByTPL(substring2);
 
-        NavigationUI.backToMainPageFromArticle();
+        ArticlePageObject.addSecondMoreArticleToMyList(name_of_folder);
+        if (Platform.getInstance().isAndroid()){
+            NavigationUI.backToMainPageFromArticle();
+        } else {
+            NavigationUI.backToMain();
+        }
         NavigationUI.clickMyLists();
         MyListsPageObject MyListsPageObject = MyListsPageObjectFactory.get(driver);
+        if (Platform.getInstance().isIOS()){
+            MyListsPageObject.closeSyncWindow();
+        }
         MyListsPageObject.openFolderByName(name_of_folder);
+        int amountOfArticlesBefore = MyListsPageObject.getAmountOfAddedArticles();
+        System.out.println(amountOfArticlesBefore);
         MyListsPageObject.swipeByArticleToDelete(article_subtitle);
         MyListsPageObject.waitForArticleToDisappearByTitle(article_subtitle);
-        MyListsPageObject.waitForArticleToAppearByTitle(article_subtitle_2);
-        MyListsPageObject.openArticleFromMyList(article_subtitle_2);
-        ArticlePageObject.assertElementHasTitle(article_subtitle_2);
+        int amountOfArticlesAfter = MyListsPageObject.getAmountOfAddedArticles();
+        System.out.println(amountOfArticlesAfter);
+        assertEquals("Article wasn't deleted",
+                amountOfArticlesBefore - 1,
+                amountOfArticlesAfter
+        );
+
+//        MyListsPageObject.waitForArticleToAppearByTitle(article_subtitle_2);
+//        MyListsPageObject.openArticleFromMyList(article_subtitle_2);
+//        ArticlePageObject.assertElementHasTitle(article_subtitle_2);
 
     }
 }

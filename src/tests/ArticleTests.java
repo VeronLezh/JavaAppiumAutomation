@@ -48,7 +48,7 @@ public class ArticleTests extends CoreTestCase {
         SearchPageObject.typeSearchLine(search_line);
         SearchPageObject.clickByArticleWithSubstring("Automation for Apps");
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
-        String article_subtitle = ArticlePageObject.getArticleSubtitle();
+        String article_subtitle = ArticlePageObject.getArticleSubtitleByTPL("Automation for Apps");
         ArticlePageObject.assertElementHasTitle(article_subtitle);
     }
 }

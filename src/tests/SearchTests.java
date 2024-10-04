@@ -33,7 +33,7 @@ public class SearchTests extends CoreTestCase {
                     driver.findElements(By.id("org.wikipedia:id/page_list_item_title")).size()>1);
         } else {
             assertTrue( "Less than 2 articles were found in the search results",
-                    driver.findElements(By.xpath("//XCUIElementTypeCollectionView/XCUIElementTypeCell")).size()>1);
+                    driver.findElements(By.xpath("//XCUIElementTypeCollectionView[1]/XCUIElementTypeCell")).size()>1);
         }
 
         SearchPageObject.waitForCancelButtonToAppear();

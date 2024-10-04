@@ -11,6 +11,7 @@ public class iOSMyListsPageObject extends MyListsPageObject {
         CLOSE_SYNC_WINDOW = "id:Close";
         READING_LISTS = "xpath://XCUIElementTypeStaticText[@name='Reading lists']";
         SWIPE_ACTION_DELETE = "id:swipe action delete";
+        SAVED_ARTICLE_LIST_ITEM="xpath://XCUIElementTypeCell";
     }
     public iOSMyListsPageObject(AppiumDriver driver){
         super(driver);
