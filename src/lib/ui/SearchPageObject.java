@@ -1,6 +1,7 @@
 package src.lib.ui;
 
-import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import src.lib.Platform;
 
 
 abstract public class SearchPageObject extends MainPageObject {
@@ -16,7 +17,7 @@ abstract public class SearchPageObject extends MainPageObject {
             EMPTY_SEARCH_RESULTS_LABEL;
 
 
-    public SearchPageObject(AppiumDriver driver)
+    public SearchPageObject(RemoteWebDriver driver)
     {
         super(driver);
     }
@@ -36,10 +37,12 @@ abstract public class SearchPageObject extends MainPageObject {
 
     public void skipOnboarding()
     {
-        this.waitForElementAndClick(
-                SKIP_BUTTON,
-                "Cannot find Skip button on Welcome screen",
-                5);
+        if (Platform.getInstance().isAndroid() || Platform.getInstance().isIOS()) {
+            this.waitForElementAndClick(
+                    SKIP_BUTTON,
+                    "Cannot find Skip button on Welcome screen",
+                    5);
+        }
     }
 
     public void initSearchInput()

@@ -1,7 +1,7 @@
 package src.lib.ui;
 
-import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import src.lib.Platform;
 
 abstract public class ArticlePageObject extends MainPageObject{
@@ -14,9 +14,10 @@ abstract public class ArticlePageObject extends MainPageObject{
             CREATE_NEW_LIST_BUTTON,
             MY_LIST_NAME_INPUT,
             OK_BUTTON,
-            EXISTING_MY_LIST_FOLDER;
+            EXISTING_MY_LIST_FOLDER,
+            OPTIONS_REMOVE_FROM_MY_LIST;
 
-    public ArticlePageObject(AppiumDriver driver)
+    public ArticlePageObject(RemoteWebDriver driver)
     {
         super(driver);
     }
@@ -43,8 +44,10 @@ abstract public class ArticlePageObject extends MainPageObject{
         WebElement subtitle_element = waitForSubtitleElement();
         if (Platform.getInstance().isAndroid()){
             return subtitle_element.getAttribute("text");
-        } else {
+        } else if(Platform.getInstance().isIOS()) {
             return subtitle_element.getAttribute("name");
+        } else {
+            return subtitle_element.getText();
         }
     }
 
@@ -58,8 +61,10 @@ abstract public class ArticlePageObject extends MainPageObject{
         );
         if (Platform.getInstance().isAndroid()){
             return subtitle_element.getAttribute("text");
-        } else {
+        } else if(Platform.getInstance().isIOS()) {
             return subtitle_element.getAttribute("name");
+        } else {
+            return subtitle_element.getText();
         }
     }
 
@@ -68,16 +73,23 @@ abstract public class ArticlePageObject extends MainPageObject{
         if (Platform.getInstance().isAndroid()){
             this.swipeUpToFindElement(FOOTER_ELEMENT,
                     "Cannot find the end of article",
-                    20);
-        } else{
+                    40);
+        } else if (Platform.getInstance().isIOS()) {
             this.swipeUpTillElementAppear(FOOTER_ELEMENT,
                     "Cannot find the end of article",
-                    20);
+                    40);
+        } else {
+            this.scrollWebPageTillElementNotVisible(FOOTER_ELEMENT,
+                    "Cannot find the end of article",
+                    40);
         }
 
     }
 
     public void addArticleToMyList(String name_of_folder){
+        if (Platform.getInstance().isMW()){
+            this.removeArticleFromSavedIfAdded();
+        }
         this.waitForElementAndClick(
                 SAVE_ARTICLE_BUTTON,
                 "Cannot find Save article button",
@@ -129,6 +141,19 @@ abstract public class ArticlePageObject extends MainPageObject{
                 article_xpath,
                 "Cannot find title " + article_title + " as article title",
                 article_title);
+    }
+
+    public void removeArticleFromSavedIfAdded(){
+        if (this.isElementPresent(OPTIONS_REMOVE_FROM_MY_LIST)){
+            this.waitForElementAndClick(
+                    OPTIONS_REMOVE_FROM_MY_LIST,
+                    "Cannot click button to remove an article from saved",
+                    1
+            );
+            this.waitForElementPresent(SAVE_ARTICLE_BUTTON,
+                    "Cannot find button to add an article to saved list",
+                    5);
+        }
     }
 
 }

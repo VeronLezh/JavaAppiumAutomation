@@ -1,14 +1,17 @@
 package src.lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import src.lib.Platform;
 
 abstract public class NavigationUI extends MainPageObject{
     protected static String
             NAVIGATION_UP,
             GO_TO_MAIN, //ios button
-            MY_LISTS_BUTTON;
+            MY_LISTS_BUTTON,
+            OPEN_NAVIGATION;
 
-    public NavigationUI(AppiumDriver driver)
+    public NavigationUI(RemoteWebDriver driver)
     {
         super(driver);
     }
@@ -33,10 +36,25 @@ abstract public class NavigationUI extends MainPageObject{
     }
 
     public void clickMyLists(){
+        if (Platform.getInstance().isMW()){
+            this.tryClickElementWithFewAttempts(MY_LISTS_BUTTON,
+                    "Cannot find Watchlist button",
+                    5);
+        }
         this.waitForElementAndClick(
                MY_LISTS_BUTTON,
                 "Cannot find Saved articles button",
                 5);
+    }
+
+    public void openNavigation(){
+        if (Platform.getInstance().isMW()){
+            this.waitForElementAndClick(OPEN_NAVIGATION,
+                    "Cannot find button to open navigation menu",
+                    5);
+        }else {
+            System.out.println("Method openNavigation do nothing for platform "+Platform.getInstance().getPlatformVar());
+        }
     }
 
 }

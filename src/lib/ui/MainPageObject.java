@@ -2,12 +2,11 @@ package src.lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Pause;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import src.lib.Platform;
@@ -20,9 +19,9 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 public class MainPageObject {
-    protected AppiumDriver driver;
+    protected RemoteWebDriver driver;
 
-    public MainPageObject(AppiumDriver driver){
+    public MainPageObject(RemoteWebDriver driver){
         this.driver=driver;
     }
     public WebElement waitForElementPresent(String locator, String error_message, long timeoutInSeconds) {
@@ -69,8 +68,10 @@ public class MainPageObject {
         WebElement element = waitForElementPresent(locator, error_message, 5);
         if (Platform.getInstance().isAndroid()){
             Assert.assertTrue(error_message, element.getAttribute("text").equals(expected_text));
-        } else {
+        } else if (Platform.getInstance().isIOS()){
             Assert.assertTrue(error_message, element.getAttribute("name").equals(expected_text));
+        }else {
+            Assert.assertTrue(error_message, element.getText().equals(expected_text));
         }
 
     }
@@ -101,6 +102,30 @@ public class MainPageObject {
     public void swipeUpQuick(){
         swipeUp(300);
     }
+
+    public void scrollWebPageUp(){
+        if (Platform.getInstance().isMW()){
+            JavascriptExecutor JSExecutor = (JavascriptExecutor) driver;
+            JSExecutor.executeScript("window.scrollBy(0,250)");
+        } else {
+            System.out.println("Method scrollWebPageUp does nothing for platform "+Platform.getInstance().getPlatformVar());
+        }
+    }
+
+    public void scrollWebPageTillElementNotVisible(String locator, String error_message, int max_swipes){
+        int already_swiped = 0;
+
+        WebElement element=this.waitForElementPresent(locator, error_message);
+
+        while (!this.isElementLocatedOnTheScreen(locator)){
+            scrollWebPageUp();
+            ++already_swiped;
+            if (already_swiped > max_swipes){
+                Assert.assertTrue(error_message,element.isDisplayed());
+            }
+        }
+    }
+
     public void swipeUpToFindElement(String locator, String error_message, int max_swipes){
         By by = this.getLocatorByString(locator);
         int already_swiped = 0;
@@ -128,6 +153,11 @@ public class MainPageObject {
 
     public boolean isElementLocatedOnTheScreen(String locator){
         int element_location_by_y = this.waitForElementPresent(locator,"Cannot find element by locator",5).getLocation().getY();
+        if (Platform.getInstance().isMW()){
+            JavascriptExecutor JSExecutor = (JavascriptExecutor) driver;
+            Object js_result = JSExecutor.executeScript("return window.pageYOffset");
+            element_location_by_y -= Integer.parseInt(js_result.toString());
+        }
         int screen_size_by_y=driver.manage().window().getSize().getHeight();
         return element_location_by_y < screen_size_by_y;
     }
@@ -203,9 +233,30 @@ public class MainPageObject {
             return By.xpath(locator);
         } else if (by_type.equals("id")) {
             return By.id(locator);
-        }
-            else {
+        } else if (by_type.equals("css")) {
+            return By.cssSelector(locator);
+        } else {
             throw new IllegalArgumentException("Cannot get type of locator: "+ locator_with_type);
+        }
+    }
+
+    public boolean isElementPresent(String locator){
+        return getAmountOfElements(locator)>0;
+    }
+
+    public void tryClickElementWithFewAttempts(String locator, String error_message, int amount_of_attempts){
+        int current_attempts = 0;
+        boolean need_more_attempts=true;
+        while (need_more_attempts) {
+            try{
+                this.waitForElementAndClick(locator,error_message,1);
+                need_more_attempts=false;
+            } catch (Exception e) {
+                if (current_attempts>amount_of_attempts){
+                    this.waitForElementAndClick(locator,error_message,1);
+                }
+            }
+            ++current_attempts;
         }
     }
 }

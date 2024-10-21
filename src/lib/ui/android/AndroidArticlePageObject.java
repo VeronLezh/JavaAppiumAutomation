@@ -1,6 +1,7 @@
 package src.lib.ui.android;
 
 import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import src.lib.ui.ArticlePageObject;
 
 public class AndroidArticlePageObject extends ArticlePageObject {
@@ -15,7 +16,7 @@ public class AndroidArticlePageObject extends ArticlePageObject {
         EXISTING_MY_LIST_FOLDER = "id:org.wikipedia:id/item_reading_list_statistical_description";
     }
 
-    public AndroidArticlePageObject(AppiumDriver driver){
+    public AndroidArticlePageObject(RemoteWebDriver driver){
         super(driver);
     }
 }

@@ -1,6 +1,7 @@
 package src.lib.ui.ios;
 
 import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import src.lib.ui.WelcomePageObject;
 
 public class iOSWelcomePageObject extends WelcomePageObject {
@@ -14,7 +15,7 @@ public class iOSWelcomePageObject extends WelcomePageObject {
         GET_STARTED_BUTTON = "xpath://XCUIElementTypeButton[@name='Get started']";
     }
 
-    public iOSWelcomePageObject(AppiumDriver driver){
+    public iOSWelcomePageObject(RemoteWebDriver driver){
 
         super(driver);
     }

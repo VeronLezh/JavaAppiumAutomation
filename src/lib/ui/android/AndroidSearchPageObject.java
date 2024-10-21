@@ -1,6 +1,7 @@
 package src.lib.ui.android;
 
 import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import src.lib.ui.SearchPageObject;
 
 public class AndroidSearchPageObject extends SearchPageObject {
@@ -18,7 +19,7 @@ public class AndroidSearchPageObject extends SearchPageObject {
 }
 
 
-    public AndroidSearchPageObject(AppiumDriver driver){
+    public AndroidSearchPageObject(RemoteWebDriver driver){
         super(driver);
     }
 }

@@ -1,6 +1,7 @@
 package src.lib.ui.ios;
 
 import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import src.lib.ui.NavigationUI;
 
 public class iOSNavigationUI extends NavigationUI {
@@ -10,7 +11,7 @@ public class iOSNavigationUI extends NavigationUI {
         GO_TO_MAIN="id:Wikipedia, return to Explore";
     }
 
-    public iOSNavigationUI(AppiumDriver driver){
+    public iOSNavigationUI(RemoteWebDriver driver){
         super(driver);
     }
 }

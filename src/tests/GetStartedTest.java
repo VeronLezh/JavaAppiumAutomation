@@ -11,6 +11,9 @@ public class GetStartedTest extends CoreTestCase {
     @Test
     public void testPassThroughWelcome()
     {
+        if (Platform.getInstance().isMW()){
+            return;
+        }
         WelcomePageObject WelcomePageObject = WelcomePageObjectFactory.get(driver);
         if (Platform.getInstance().isIOS()){
             WelcomePageObject.waitForLearnMoreLink();

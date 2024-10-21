@@ -1,6 +1,7 @@
 package src.lib.ui.android;
 
 import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import src.lib.ui.WelcomePageObject;
 
 public class AndroidWelcomePageObject extends WelcomePageObject {
@@ -14,7 +15,7 @@ public class AndroidWelcomePageObject extends WelcomePageObject {
         GET_STARTED_BUTTON = "xpath://*[@resource-id='org.wikipedia:id/fragment_onboarding_done_button']";
     }
 
-    public AndroidWelcomePageObject(AppiumDriver driver){
+    public AndroidWelcomePageObject(RemoteWebDriver driver){
         super(driver);
     }
 }

@@ -1,6 +1,7 @@
 package src.lib.ui.ios;
 
 import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import src.lib.ui.ArticlePageObject;
 
 public class iOSArticlePageObject extends ArticlePageObject {
@@ -16,7 +17,7 @@ public class iOSArticlePageObject extends ArticlePageObject {
         EXISTING_MY_LIST_FOLDER = "xpath://XCUIElementTypeStaticText[@name='Learning programming']";
     }
 
-    public iOSArticlePageObject(AppiumDriver driver){
+    public iOSArticlePageObject(RemoteWebDriver driver){
         super(driver);
     }
 }
