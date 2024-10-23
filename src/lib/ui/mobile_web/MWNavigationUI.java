@@ -6,7 +6,7 @@ import src.lib.ui.NavigationUI;
 public class MWNavigationUI extends NavigationUI {
     static {
         NAVIGATION_UP = "id:Back";
-        MY_LISTS_BUTTON = "css:a[data-event-name='watchlist']";
+        MY_LISTS_BUTTON = "xpath://a[contains(@class, 'toggle-list-item__anchor') and span[text()='Watchlist']]";
         GO_TO_MAIN="id:Wikipedia, return to Explore";
         OPEN_NAVIGATION="css:#mw-mf-main-menu-button";
     }

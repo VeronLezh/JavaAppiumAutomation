@@ -7,7 +7,7 @@ import src.lib.Platform;
 abstract public class ArticlePageObject extends MainPageObject{
     protected static String
             SUBTITLE,
-            SUBTITLE_BY_TPL,
+            TITLE_BY_TPL,
             FOOTER_ELEMENT,
             SAVE_ARTICLE_BUTTON,
             ADD_TO_LIST_BUTTON,
@@ -23,7 +23,7 @@ abstract public class ArticlePageObject extends MainPageObject{
     }
 
     private static String getArticleXpathByName(String article_title){
-        return SUBTITLE_BY_TPL.replace("{TITLE}",article_title);
+        return TITLE_BY_TPL.replace("{TITLE}",article_title);
     }
 
     public void waitForArticleTitleElement(String article_title){
@@ -87,36 +87,35 @@ abstract public class ArticlePageObject extends MainPageObject{
     }
 
     public void addArticleToMyList(String name_of_folder){
-        if (Platform.getInstance().isMW()){
-            this.removeArticleFromSavedIfAdded();
-        }
-        this.waitForElementAndClick(
-                SAVE_ARTICLE_BUTTON,
-                "Cannot find Save article button",
-                5);
-        this.waitForElementAndClick(
-                ADD_TO_LIST_BUTTON,
-                "Cannot find Add to list button",
-                5
-        );
-        if (Platform.getInstance().isIOS()) {
+
             this.waitForElementAndClick(
-                    CREATE_NEW_LIST_BUTTON,
-                    "Cannot find +Create new list button",
+                    SAVE_ARTICLE_BUTTON,
+                    "Cannot find Save article button",
+                    5);
+            this.waitForElementAndClick(
+                    ADD_TO_LIST_BUTTON,
+                    "Cannot find Add to list button",
                     5
             );
-        }
-        this.waitForElementAndSendKeys(
-                MY_LIST_NAME_INPUT,
-                name_of_folder,
-                "Cannot enter text into list folder input",
-                5
-        );
-        this.waitForElementAndClick(
-                OK_BUTTON,
-                "Cannot find Add to list button",
-                5
-        );
+            if (Platform.getInstance().isIOS()) {
+                this.waitForElementAndClick(
+                        CREATE_NEW_LIST_BUTTON,
+                        "Cannot find +Create new list button",
+                        5
+                );
+            }
+            this.waitForElementAndSendKeys(
+                    MY_LIST_NAME_INPUT,
+                    name_of_folder,
+                    "Cannot enter text into list folder input",
+                    5
+            );
+            this.waitForElementAndClick(
+                    OK_BUTTON,
+                    "Cannot find Add to list button",
+                    5
+            );
+
     }
 
     public void addSecondMoreArticleToMyList(String name_of_folder){
@@ -154,6 +153,14 @@ abstract public class ArticlePageObject extends MainPageObject{
                     "Cannot find button to add an article to saved list",
                     5);
         }
+    }
+
+    public void addArticleToWatchlist(){
+        //this.removeArticleFromSavedIfAdded();
+        this.waitForElementAndClick(
+                SAVE_ARTICLE_BUTTON,
+                "Cannot find Save article button",
+                5);
     }
 
 }

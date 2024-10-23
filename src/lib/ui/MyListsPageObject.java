@@ -1,6 +1,5 @@
 package src.lib.ui;
 
-import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import src.lib.Platform;
 
@@ -61,27 +60,34 @@ abstract public class MyListsPageObject extends MainPageObject{
     public void swipeByArticleToDelete(String article_title ){
         this.waitForArticleToAppearByTitle(article_title);
         String article_xpath = getSavedArticleXpathByName(article_title);
-        if (Platform.getInstance().isMW()){
-            String remove_locator=getRemoveButtonByTitle(article_title);
-            this.waitForElementAndClick(remove_locator,
-                    "Cannot find saved article",5
+        if (Platform.getInstance().isAndroid() || Platform.getInstance().isIOS()){
+            this.swipeElementToLeft(
+                    article_xpath,
+                    "Cannot find saved article"
             );
         } else {
-        this.swipeElementToLeft(
-                article_xpath,
-                "Cannot find saved article"
-        );
-        }
+           String remove_locator = getRemoveButtonByTitle(article_title);
+           this.waitForElementAndClick(
+                   remove_locator,
+                   "Cannot click star-button to remove the saved article",
+                   10
+           );
+       }
         if (Platform.getInstance().isIOS()){
             this.clickElementToTheRightUpperCorner(SWIPE_ACTION_DELETE,"Cannot find SwipeDeleteButton");
         }
-        if (Platform.getInstance().isMW()){
+        if (Platform.getInstance().isMW()) {
+            try {
+                Thread.sleep(2000);  // sleep before page refresh 2 sec
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             driver.navigate().refresh();
         }
         this.waitForArticleToDisappearByTitle(article_title);
 
-
     }
+
      public void openArticleFromMyList(String article_title){
          this.waitForArticleToAppearByTitle(article_title);
          String article_xpath = getSavedArticleXpathByName(article_title);
@@ -91,6 +97,7 @@ abstract public class MyListsPageObject extends MainPageObject{
                  5
          );
      }
+
      public void closeSyncWindow(){
         this.waitForElementAndClick(CLOSE_SYNC_WINDOW,
                 "Cannot find Close Sync Window button in Saved",

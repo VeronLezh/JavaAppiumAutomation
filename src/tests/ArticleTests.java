@@ -31,7 +31,7 @@ public class ArticleTests extends CoreTestCase {
         SearchPageObject.skipOnboarding();
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Appium");
-        SearchPageObject.clickByArticleWithSubstring("Automation for Apps");
+        SearchPageObject.clickByArticleWithSubstring("Appium");
 
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         ArticlePageObject.waitForSubtitleElement();
@@ -46,9 +46,9 @@ public class ArticleTests extends CoreTestCase {
         SearchPageObject.initSearchInput();
         String search_line = "Appium";
         SearchPageObject.typeSearchLine(search_line);
-        SearchPageObject.clickByArticleWithSubstring("Automation for Apps");
+        SearchPageObject.clickByArticleWithSubstring("Appium");
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
-        String article_subtitle = ArticlePageObject.getArticleSubtitleByTPL("Automation for Apps");
+        String article_subtitle = ArticlePageObject.getArticleSubtitleByTPL("Appium");
         ArticlePageObject.assertElementHasTitle(article_subtitle);
     }
 }

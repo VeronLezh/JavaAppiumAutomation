@@ -1,6 +1,5 @@
 package src.lib.ui;
 
-import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import src.lib.Platform;
 
@@ -36,15 +35,17 @@ abstract public class NavigationUI extends MainPageObject{
     }
 
     public void clickMyLists(){
-        if (Platform.getInstance().isMW()){
-            this.tryClickElementWithFewAttempts(MY_LISTS_BUTTON,
-                    "Cannot find Watchlist button",
-                    5);
-        }
+        if (Platform.getInstance().isMW()) {
+            this.tryClickElementWithFewAttempts(
+                    MY_LISTS_BUTTON,
+                    "Cannot find navigation button to My list",
+                    10
+            );
+        } else {
         this.waitForElementAndClick(
                MY_LISTS_BUTTON,
                 "Cannot find Saved articles button",
-                5);
+                5);}
     }
 
     public void openNavigation(){

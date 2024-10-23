@@ -1,13 +1,12 @@
 package src.lib.ui.ios;
 
-import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import src.lib.ui.ArticlePageObject;
 
 public class iOSArticlePageObject extends ArticlePageObject {
     static {
         SUBTITLE ="xpath://XCUIElementTypeOther[@name='banner']/XCUIElementTypeOther/XCUIElementTypeStaticText[@name='Object-oriented programming language']";
-        SUBTITLE_BY_TPL = "xpath://XCUIElementTypeStaticText[@name='{TITLE}']";
+        TITLE_BY_TPL = "xpath://XCUIElementTypeStaticText[@name='{TITLE}']";
         FOOTER_ELEMENT = "id:View article in browser";
         SAVE_ARTICLE_BUTTON = "id:Save for later";
         ADD_TO_LIST_BUTTON = "id:add-to-list";
