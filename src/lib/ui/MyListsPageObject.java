@@ -1,9 +1,10 @@
 package src.lib.ui;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import src.lib.Platform;
 
-abstract public class MyListsPageObject extends MainPageObject{
+abstract public class MyListsPageObject extends src.lib.ui.MainPageObject {
     protected static String
     FOLDER_BY_NAME_TPL,
     ARTICLE_BY_TITLE_TPL,
@@ -29,6 +30,7 @@ abstract public class MyListsPageObject extends MainPageObject{
         super(driver);
     }
 
+    @Step("Open Folder with saved articles")
     public void openFolderByName(String name_of_folder){
         if (Platform.getInstance().isIOS()){
             this.openReadingLists();
@@ -39,6 +41,7 @@ abstract public class MyListsPageObject extends MainPageObject{
                 "Cannot find folder with articles by name " + name_of_folder,
                 5);
     }
+    @Step("Wait for article appears by title")
     public void waitForArticleToAppearByTitle(String article_title){
         String article_xpath = getSavedArticleXpathByName(article_title);
         this.waitForElementPresent(
@@ -47,7 +50,7 @@ abstract public class MyListsPageObject extends MainPageObject{
                 5
         );
     }
-
+    @Step("Wait for article disappears by title")
     public void waitForArticleToDisappearByTitle(String article_title){
         String article_xpath = getSavedArticleXpathByName(article_title);
         this.waitForElementNotPresent(
@@ -56,7 +59,7 @@ abstract public class MyListsPageObject extends MainPageObject{
                 5
         );
     }
-
+    @Step("Swipe article to left to delete")
     public void swipeByArticleToDelete(String article_title ){
         this.waitForArticleToAppearByTitle(article_title);
         String article_xpath = getSavedArticleXpathByName(article_title);
@@ -87,7 +90,7 @@ abstract public class MyListsPageObject extends MainPageObject{
         this.waitForArticleToDisappearByTitle(article_title);
 
     }
-
+    @Step("Open article from my list")
      public void openArticleFromMyList(String article_title){
          this.waitForArticleToAppearByTitle(article_title);
          String article_xpath = getSavedArticleXpathByName(article_title);
@@ -97,19 +100,19 @@ abstract public class MyListsPageObject extends MainPageObject{
                  5
          );
      }
-
+    @Step("Close Sync window for iOS only")
      public void closeSyncWindow(){
         this.waitForElementAndClick(CLOSE_SYNC_WINDOW,
                 "Cannot find Close Sync Window button in Saved",
                 5);
      }
-
+    @Step("Open Reading Lists for iOS only")
      public void openReadingLists(){
          this.waitForElementAndClick(READING_LISTS,
                  "Cannot find Reading Lists tab in Saved",
                  5);
      }
-
+    @Step("Count saved articles")
     public int getAmountOfAddedArticles() {
         this.waitForElementPresent(SAVED_ARTICLE_LIST_ITEM, "Cannot find saved articles", 15);
         return getAmountOfElements(SAVED_ARTICLE_LIST_ITEM);

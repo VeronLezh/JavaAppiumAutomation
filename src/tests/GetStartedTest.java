@@ -1,14 +1,21 @@
 package src.tests;
 
+import io.qameta.allure.*;
+import io.qameta.allure.junit4.DisplayName;
 import org.junit.Test;
 import src.lib.CoreTestCase;
 import src.lib.Platform;
 import src.lib.ui.WelcomePageObject;
 import src.lib.ui.factories.WelcomePageObjectFactory;
 
+@Epic("Tests for Welcome screen")
 public class GetStartedTest extends CoreTestCase {
 
     @Test
+    @Step("Starting test testPassThroughWelcome")
+    @Features(value={@Feature(value="WelcomeScreen")})
+    @DisplayName("Pass all steps in Welcome screen")
+    @Severity(value= SeverityLevel.CRITICAL)
     public void testPassThroughWelcome()
     {
         if (Platform.getInstance().isMW()){

@@ -1,10 +1,11 @@
 package src.lib.ui;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import src.lib.Platform;
 
-abstract public class ArticlePageObject extends MainPageObject{
+abstract public class ArticlePageObject extends src.lib.ui.MainPageObject {
     protected static String
             SUBTITLE,
             TITLE_BY_TPL,
@@ -21,11 +22,11 @@ abstract public class ArticlePageObject extends MainPageObject{
     {
         super(driver);
     }
-
+    @Step("Get Article title Xpath")
     private static String getArticleXpathByName(String article_title){
         return TITLE_BY_TPL.replace("{TITLE}",article_title);
     }
-
+    @Step("Get Article title name")
     public void waitForArticleTitleElement(String article_title){
         String article_xpath = getArticleXpathByName(article_title);
         this.waitForElementPresent(
@@ -34,12 +35,12 @@ abstract public class ArticlePageObject extends MainPageObject{
                 5
         );
     }
-
+    @Step("Wait for subtitle article name")
     public WebElement waitForSubtitleElement(){
         return this.waitForElementPresent(SUBTITLE,
                 "Cannot find article title on page", 10);
     }
-
+    @Step("Get subtitle article name")
     public String getArticleSubtitle() {
         WebElement subtitle_element = waitForSubtitleElement();
         if (Platform.getInstance().isAndroid()){
@@ -50,7 +51,7 @@ abstract public class ArticlePageObject extends MainPageObject{
             return subtitle_element.getText();
         }
     }
-
+    @Step("Get subtitle article name Xpath")
     public String getArticleSubtitleByTPL(String article_title) {
         String article_xpath = getArticleXpathByName(article_title); // Generation Xpath for Article title
 
@@ -68,7 +69,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         }
     }
 
-
+    @Step("Swipe artcile to the footer")
     public void swipeToFooter() {
         if (Platform.getInstance().isAndroid()){
             this.swipeUpToFindElement(FOOTER_ELEMENT,
@@ -85,7 +86,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         }
 
     }
-
+    @Step("Add article to Saved(My Lists)")
     public void addArticleToMyList(String name_of_folder){
 
             this.waitForElementAndClick(
@@ -117,7 +118,7 @@ abstract public class ArticlePageObject extends MainPageObject{
             );
 
     }
-
+    @Step("Add more articles to Saved")
     public void addSecondMoreArticleToMyList(String name_of_folder){
         this.waitForElementAndClick(
                 SAVE_ARTICLE_BUTTON,
@@ -133,7 +134,7 @@ abstract public class ArticlePageObject extends MainPageObject{
                 "Cannot find the existing folder "+name_of_folder,
                 5);
     }
-
+    @Step("Assert element has text")
     public void assertElementHasTitle(String article_title) {
         String article_xpath = getArticleXpathByName(article_title);
         this.assertElementHasText(
@@ -141,7 +142,7 @@ abstract public class ArticlePageObject extends MainPageObject{
                 "Cannot find title " + article_title + " as article title",
                 article_title);
     }
-
+    @Step("Remove article for Saved")
     public void removeArticleFromSavedIfAdded(){
         if (this.isElementPresent(OPTIONS_REMOVE_FROM_MY_LIST)){
             this.waitForElementAndClick(
@@ -154,7 +155,7 @@ abstract public class ArticlePageObject extends MainPageObject{
                     5);
         }
     }
-
+    @Step("Click Star icon to save article for mobile web")
     public void addArticleToWatchlist(){
         //this.removeArticleFromSavedIfAdded();
         this.waitForElementAndClick(

@@ -1,5 +1,8 @@
 package src.tests;
 
+import io.qameta.allure.*;
+import io.qameta.allure.junit4.DisplayName;
+import org.junit.Assert;
 import org.junit.Test;
 import src.lib.CoreTestCase;
 import src.lib.Platform;
@@ -8,8 +11,13 @@ import src.lib.ui.SearchPageObject;
 import src.lib.ui.factories.ArticlePageObjectFactory;
 import src.lib.ui.factories.SearchPageObjectFactory;
 
+@Epic("Tests for native apps")
 public class ChangeAppConditionTests extends CoreTestCase {
     @Test
+    @Step("Starting test testScreenRotationForArticlePage")
+    @Features(value={@Feature(value="Search"),@Feature(value="Article"),@Feature(value="App Condition")})
+    @Severity(value= SeverityLevel.NORMAL)
+    @DisplayName("Test App Rotation screen")
     public void testScreenRotationForArticlePage(){
         if (Platform.getInstance().isMW()){
             return;
@@ -25,7 +33,7 @@ public class ChangeAppConditionTests extends CoreTestCase {
         this.rotateScreenLandscape();
         String title_after_rotation=ArticlePageObject.getArticleSubtitle();
 
-        assertEquals(
+        Assert.assertEquals(
                 "Title has been changed after rotation",
                 title_before_rotation,
                 title_after_rotation
@@ -33,7 +41,7 @@ public class ChangeAppConditionTests extends CoreTestCase {
         this.rotateScreenPortrait();
         String title_after_second_rotation=ArticlePageObject.getArticleSubtitle();
 
-        assertEquals(
+        Assert.assertEquals(
                 "Title has been changed after rotation",
                 title_before_rotation,
                 title_after_second_rotation
@@ -41,6 +49,10 @@ public class ChangeAppConditionTests extends CoreTestCase {
     }
 
     @Test
+    @Step("Starting test testCheckSearchArticleInBackground")
+    @Features(value={@Feature(value="Search"),@Feature(value="App Condition")})
+    @Severity(value= SeverityLevel.NORMAL)
+    @DisplayName("Test turn App in background")
     public void testCheckSearchArticleInBackground(){
         if (Platform.getInstance().isMW()){
             return;
